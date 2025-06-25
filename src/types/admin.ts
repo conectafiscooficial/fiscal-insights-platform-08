@@ -35,10 +35,14 @@ export interface Usuario {
   id: string;
   nome: string;
   email: string;
-  plano: 'Básico' | 'Premium' | 'Corporativo';
+  plano: 'gratuito' | 'Básico' | 'Premium' | 'Corporativo';
   status: 'Ativo' | 'Pendente' | 'Bloqueado';
   dataRegistro: string;
   ultimoAcesso: string;
+  telefone?: string;
+  tipo_pessoa?: 'fisica' | 'juridica';
+  documento?: string;
+  empresa?: string;
 }
 
 export interface Curso {
@@ -90,4 +94,15 @@ export interface ConfiguracaoSistema {
   tipo: 'texto' | 'numero' | 'boolean' | 'email';
   categoria: string;
   descricao: string;
+}
+
+export interface Matricula {
+  id: string;
+  user_id: string;
+  tipo_curso: 'ead' | 'presencial' | 'incompany';
+  nome_curso: string;
+  valor?: number;
+  status: 'pendente' | 'confirmada' | 'cancelada';
+  dados_matricula: any;
+  created_at: string;
 }

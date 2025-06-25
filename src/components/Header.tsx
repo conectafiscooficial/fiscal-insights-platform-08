@@ -1,204 +1,193 @@
 
-import { Search, User, ShoppingCart, Menu, Bell, Settings } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
+import { Phone, Mail, User, Menu } from "lucide-react";
 import { useState } from "react";
-import AssinaturaPremiumForm from "./forms/AssinaturaPremiumForm";
+import UserMenu from "./UserMenu";
 
-interface HeaderProps {
-  isLoggedIn: boolean;
-  setIsLoggedIn: (value: boolean) => void;
-}
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-const Header = ({ isLoggedIn, setIsLoggedIn }: HeaderProps) => {
-  const [premiumFormOpen, setPremiumFormOpen] = useState(false);
-
-  const handleSuporteClick = () => {
-    setPremiumFormOpen(true);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <>
-      <header className="bg-white shadow-lg border-b border-blue-100">
-        {/* Top Bar */}
-        <div className="border-b border-slate-200 bg-gradient-to-r from-blue-600 to-emerald-600">
-          <div className="container mx-auto px-4 py-2">
-            <div className="flex justify-between items-center text-white text-sm">
-              <div className="flex items-center space-x-4">
-                <span>📞 (15) 30137302</span>
-                <span>✉️ contato@conectafisco.com.br</span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:text-blue-100" asChild>
-                  <Link to="/newsletter">Newsletter</Link>
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:text-blue-100" asChild>
-                  <Link to="/quem-somos">Quem Somos</Link>
-                </Button>
-              </div>
+    <header className="bg-white shadow-md sticky top-0 z-50">
+      {/* Top Bar */}
+      <div className="bg-slate-700 text-white py-2">
+        <div className="container mx-auto px-4 flex justify-between items-center text-sm">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
+              <Phone className="w-3 h-3" />
+              <span>(15) 30137302</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Mail className="w-3 h-3" />
+              <span>contato@conectafisco.com</span>
             </div>
           </div>
+          <div className="flex items-center space-x-4">
+            <UserMenu />
+          </div>
         </div>
+      </div>
 
-        {/* Main Header */}
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link to="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-emerald-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">CF</span>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">
-                  Conecta Fisco
-                </h1>
-                <p className="text-sm text-slate-600">Conectando você ao universo fiscal</p>
-              </div>
+      {/* Main Header */}
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-emerald-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">CF</span>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-slate-800">Conecta Fisco</h1>
+              <p className="text-sm text-slate-600">Soluções Fiscais Completas</p>
+            </div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-6">
+            <Link to="/quem-somos" className="text-slate-700 hover:text-blue-600 transition-colors">
+              Quem Somos
             </Link>
-
-            {/* Search Bar */}
-            <div className="hidden md:flex flex-1 max-w-md mx-8">
-              <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
-                <Input
-                  placeholder="Buscar legislação, normas, cursos..."
-                  className="pl-10 pr-4 border-slate-300 focus:border-blue-500 focus:ring-blue-500"
-                />
+            
+            <div className="relative group">
+              <button className="text-slate-700 hover:text-blue-600 transition-colors flex items-center space-x-1">
+                <span>Produtos</span>
+              </button>
+              <div className="absolute left-0 top-full pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="bg-white rounded-lg shadow-lg border border-slate-200 py-2">
+                  <Link to="/softwares" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    Softwares
+                  </Link>
+                  <Link to="/consultoria" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    Consultoria
+                  </Link>
+                  <Link to="/ferramentas" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    Ferramentas
+                  </Link>
+                </div>
               </div>
             </div>
 
-            {/* User Area */}
-            <div className="flex items-center space-x-4">
-              {isLoggedIn ? (
-                <>
-                  <Button variant="ghost" size="sm" className="relative">
-                    <Bell className="w-4 h-4" />
-                    <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-red-500 text-xs">
-                      3
-                    </Badge>
-                  </Button>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="flex items-center space-x-2">
-                        <User className="w-4 h-4" />
-                        <span className="hidden md:inline">Minha Conta</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem>Dashboard</DropdownMenuItem>
-                      <DropdownMenuItem>Meu Perfil</DropdownMenuItem>
-                      <DropdownMenuItem>Meus Cursos</DropdownMenuItem>
-                      <DropdownMenuItem>Assinatura</DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to="/admin" className="flex items-center">
-                          <Settings className="w-4 h-4 mr-2" />
-                          Painel Admin
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setIsLoggedIn(false)}>
-                        Sair
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </>
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setIsLoggedIn(true)}
-                  >
-                    Login
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    className="bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700"
-                  >
-                    Cadastre-se
-                  </Button>
+            <div className="relative group">
+              <button className="text-slate-700 hover:text-blue-600 transition-colors flex items-center space-x-1">
+                <span>Cursos</span>
+              </button>
+              <div className="absolute left-0 top-full pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="bg-white rounded-lg shadow-lg border border-slate-200 py-2">
+                  <Link to="/cursos/ead" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    EAD
+                  </Link>
+                  <Link to="/cursos/presencial" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    Presencial
+                  </Link>
+                  <Link to="/cursos/incompany" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    In Company
+                  </Link>
                 </div>
-              )}
-              
-              <Button variant="ghost" size="sm">
-                <ShoppingCart className="w-4 h-4" />
-              </Button>
-              
-              <Button variant="ghost" size="sm" className="md:hidden">
-                <Menu className="w-4 h-4" />
-              </Button>
+              </div>
             </div>
-          </div>
 
-          {/* Navigation Menu */}
-          <nav className="mt-4 hidden md:block">
-            <div className="flex items-center space-x-8">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="font-medium hover:text-blue-600">
-                    Produtos
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-48">
-                  <DropdownMenuItem asChild>
-                    <Link to="/softwares">Softwares Fiscais</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/consultoria">Consultoria Especializada</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/ferramentas">Ferramentas Online</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="font-medium hover:text-blue-600">
-                    Cursos
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-48">
-                  <DropdownMenuItem asChild>
-                    <Link to="/cursos/ead">Cursos EAD</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/cursos/presencial">Cursos Presenciais</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/cursos/incompany">Treinamentos In Company</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <Button 
-                variant="ghost" 
-                className="font-medium hover:text-blue-600"
-                onClick={handleSuporteClick}
-              >
-                Suporte 👑
-              </Button>
-              
-              <Button variant="ghost" className="font-medium hover:text-blue-600" asChild>
-                <Link to="/contato">Fale Conosco</Link>
-              </Button>
-            </div>
+            <Link to="/contato" className="text-slate-700 hover:text-blue-600 transition-colors">
+              Contato
+            </Link>
+            <Link to="/newsletter" className="text-slate-700 hover:text-blue-600 transition-colors">
+              Newsletter
+            </Link>
+            <Link to="/suporte" className="text-slate-700 hover:text-blue-600 transition-colors">
+              Suporte
+            </Link>
           </nav>
-        </div>
-      </header>
 
-      <AssinaturaPremiumForm
-        isOpen={premiumFormOpen}
-        onClose={() => setPremiumFormOpen(false)}
-      />
-    </>
+          {/* Mobile Menu Button */}
+          <button 
+            className="lg:hidden p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            onClick={toggleMenu}
+          >
+            <Menu className="w-6 h-6 text-slate-700" />
+          </button>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <nav className="lg:hidden mt-4 pt-4 border-t border-slate-200 space-y-2">
+            <Link 
+              to="/quem-somos" 
+              className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Quem Somos
+            </Link>
+            <Link 
+              to="/softwares" 
+              className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Softwares
+            </Link>
+            <Link 
+              to="/consultoria" 
+              className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Consultoria
+            </Link>
+            <Link 
+              to="/ferramentas" 
+              className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Ferramentas
+            </Link>
+            <Link 
+              to="/cursos/ead" 
+              className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Cursos EAD
+            </Link>
+            <Link 
+              to="/cursos/presencial" 
+              className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Cursos Presenciais
+            </Link>
+            <Link 
+              to="/cursos/incompany" 
+              className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              In Company
+            </Link>
+            <Link 
+              to="/contato" 
+              className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Contato
+            </Link>
+            <Link 
+              to="/newsletter" 
+              className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Newsletter
+            </Link>
+            <Link 
+              to="/suporte" 
+              className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Suporte
+            </Link>
+          </nav>
+        )}
+      </div>
+    </header>
   );
 };
 

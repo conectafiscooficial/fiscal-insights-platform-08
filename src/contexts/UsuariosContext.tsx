@@ -1,6 +1,7 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Usuario } from '@/types/admin';
+import { supabase } from '@/integrations/supabase/client';
 
 interface UsuariosContextType {
   usuarios: Usuario[];
@@ -8,6 +9,10 @@ interface UsuariosContextType {
   adicionarUsuario: (usuario: Omit<Usuario, 'id'>) => void;
   atualizarUsuario: (id: string, dados: Partial<Usuario>) => void;
   removerUsuario: (id: string) => void;
+  bloquearUsuario: (id: string) => void;
+  desbloquearUsuario: (id: string) => void;
+  alterarPlano: (id: string, novoPlano: Usuario['plano']) => void;
+  carregarUsuarios: () => Promise<void>;
 }
 
 const UsuariosContext = createContext<UsuariosContextType | undefined>(undefined);
@@ -21,12 +26,35 @@ export const useUsuarios = () => {
 };
 
 export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([
-    { id: '1', nome: 'João Silva', email: 'joao@email.com', plano: 'Premium', status: 'Ativo', dataRegistro: '2024-01-01', ultimoAcesso: '2024-01-15' },
-    { id: '2', nome: 'Maria Santos', email: 'maria@email.com', plano: 'Básico', status: 'Ativo', dataRegistro: '2024-01-02', ultimoAcesso: '2024-01-14' },
-    { id: '3', nome: 'Pedro Costa', email: 'pedro@email.com', plano: 'Premium', status: 'Pendente', dataRegistro: '2024-01-03', ultimoAcesso: '2024-01-13' },
-    { id: '4', nome: 'Ana Oliveira', email: 'ana@email.com', plano: 'Corporativo', status: 'Ativo', dataRegistro: '2024-01-04', ultimoAcesso: '2024-01-16' }
-  ]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+
+  const carregarUsuarios = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*');
+      
+      if (error) throw error;
+      
+      const usuariosFormatados = data.map(profile => ({
+        id: profile.id,
+        nome: profile.nome_completo || profile.email,
+        email: profile.email,
+        plano: (profile.plano || 'gratuito') as Usuario['plano'],
+        status: (profile.status || 'ativo') as Usuario['status'],
+        dataRegistro: profile.created_at,
+        ultimoAcesso: profile.updated_at
+      }));
+      
+      setUsuarios(usuariosFormatados);
+    } catch (error) {
+      console.error('Erro ao carregar usuários:', error);
+    }
+  };
+
+  useEffect(() => {
+    carregarUsuarios();
+  }, []);
 
   const adicionarUsuario = (usuario: Omit<Usuario, 'id'>) => {
     const novoUsuario: Usuario = {
@@ -36,14 +64,42 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
     setUsuarios(prev => [...prev, novoUsuario]);
   };
 
-  const atualizarUsuario = (id: string, dados: Partial<Usuario>) => {
-    setUsuarios(prev => prev.map(usuario => 
-      usuario.id === id ? { ...usuario, ...dados } : usuario
-    ));
+  const atualizarUsuario = async (id: string, dados: Partial<Usuario>) => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          nome_completo: dados.nome,
+          status: dados.status,
+          plano: dados.plano,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      setUsuarios(prev => prev.map(usuario => 
+        usuario.id === id ? { ...usuario, ...dados } : usuario
+      ));
+    } catch (error) {
+      console.error('Erro ao atualizar usuário:', error);
+    }
   };
 
   const removerUsuario = (id: string) => {
     setUsuarios(prev => prev.filter(usuario => usuario.id !== id));
+  };
+
+  const bloquearUsuario = (id: string) => {
+    atualizarUsuario(id, { status: 'Bloqueado' });
+  };
+
+  const desbloquearUsuario = (id: string) => {
+    atualizarUsuario(id, { status: 'Ativo' });
+  };
+
+  const alterarPlano = (id: string, novoPlano: Usuario['plano']) => {
+    atualizarUsuario(id, { plano: novoPlano });
   };
 
   const value: UsuariosContextType = {
@@ -51,7 +107,11 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
     setUsuarios,
     adicionarUsuario,
     atualizarUsuario,
-    removerUsuario
+    removerUsuario,
+    bloquearUsuario,
+    desbloquearUsuario,
+    alterarPlano,
+    carregarUsuarios
   };
 
   return (

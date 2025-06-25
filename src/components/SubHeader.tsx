@@ -8,13 +8,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import AssinaturaPremiumForm from "./forms/AssinaturaPremiumForm";
 
 const SubHeader = () => {
   const [premiumFormOpen, setPremiumFormOpen] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const handleMenuClick = () => {
-    setPremiumFormOpen(true);
+  const handleMenuClick = (requiresAuth: boolean, requiresPremium: boolean) => {
+    if (requiresAuth && !user) {
+      navigate('/auth');
+      return;
+    }
+    
+    if (requiresPremium) {
+      setPremiumFormOpen(true);
+    }
   };
 
   const menuItems = [
@@ -84,9 +95,7 @@ const SubHeader = () => {
                       key={itemIndex}
                       className="hover:bg-blue-50 hover:text-blue-700 cursor-pointer"
                       onClick={() => {
-                        if (menusComPremium.includes(menu.title)) {
-                          handleMenuClick();
-                        }
+                        handleMenuClick(true, menusComPremium.includes(menu.title));
                       }}
                     >
                       {item}
