@@ -1,25 +1,23 @@
 
-export interface IndiceEconomico {
+export interface Usuario {
   id: string;
   nome: string;
-  valor: string;
-  variacao: string;
-  tipo: 'alta' | 'baixa' | 'neutro';
-  ultimaAtualizacao: string;
-  fonte?: string;
+  email: string;
+  plano: 'gratuito' | 'basico' | 'premium' | 'corporativo';
+  status: 'ativo' | 'pendente' | 'bloqueado' | 'rejeitado';
+  dataRegistro: string;
+  ultimoAcesso: string;
 }
 
 export interface Artigo {
   id: string;
   titulo: string;
-  resumo: string;
   conteudo: string;
   categoria: string;
   autor: string;
-  status: 'publicado' | 'rascunho' | 'revisao';
   dataPublicacao: string;
-  tags: string[];
-  secaoTematica?: string;
+  status: 'rascunho' | 'publicado' | 'arquivado';
+  visualizacoes: number;
 }
 
 export interface LinkExterno {
@@ -27,82 +25,48 @@ export interface LinkExterno {
   titulo: string;
   url: string;
   categoria: string;
-  descricao?: string;
-  ativo: boolean;
+  descricao: string;
+  dataAdicao: string;
 }
 
-export interface Usuario {
+export interface IndiceEconomico {
   id: string;
   nome: string;
-  email: string;
-  plano: 'gratuito' | 'Básico' | 'Premium' | 'Corporativo';
-  status: 'Ativo' | 'Pendente' | 'Bloqueado';
-  dataRegistro: string;
-  ultimoAcesso: string;
-  telefone?: string;
-  tipo_pessoa?: 'fisica' | 'juridica';
-  documento?: string;
-  empresa?: string;
+  valor: number;
+  dataAtualizacao: string;
+  fonte: string;
+  categoria: string;
+  unidade: string;
+  variacao?: number;
 }
 
 export interface Curso {
   id: string;
-  titulo: string;
+  nome: string;
   descricao: string;
   categoria: string;
-  instrutor: string;
-  duracao: number;
   preco: number;
-  status: 'ativo' | 'inativo' | 'rascunho';
+  duracao: string;
+  instrutor: string;
+  status: 'ativo' | 'inativo';
   dataLancamento: string;
-  alunos: number;
-  avaliacoes: number;
+  totalAlunos: number;
 }
 
 export interface Venda {
   id: string;
   produto: string;
   cliente: string;
-  email: string;
   valor: number;
-  status: 'concluida' | 'pendente' | 'cancelada';
-  dataVenda: string;
-  tipoProduto: 'curso' | 'consultoria' | 'software' | 'material';
+  data: string;
+  status: 'pendente' | 'pago' | 'cancelado';
+  formaPagamento: string;
 }
 
-export interface MenuItem {
-  id: string;
-  titulo: string;
-  items: string[];
-  ordem: number;
-  ativo: boolean;
-}
-
-export interface SecaoTematica {
-  id: string;
-  nome: string;
-  titulo: string;
-  descricao: string;
-  conteudos: Artigo[];
-  ativa: boolean;
-}
-
-export interface ConfiguracaoSistema {
+export interface Configuracao {
   id: string;
   chave: string;
   valor: string;
-  tipo: 'texto' | 'numero' | 'boolean' | 'email';
-  categoria: string;
   descricao: string;
-}
-
-export interface Matricula {
-  id: string;
-  user_id: string;
-  tipo_curso: 'ead' | 'presencial' | 'incompany';
-  nome_curso: string;
-  valor?: number;
-  status: 'pendente' | 'confirmada' | 'cancelada';
-  dados_matricula: any;
-  created_at: string;
+  categoria: string;
 }

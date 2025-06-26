@@ -38,12 +38,12 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
       
       const usuariosFormatados = data.map(profile => ({
         id: profile.id,
-        nome: profile.nome_completo || profile.email,
-        email: profile.email,
+        nome: profile.nome_completo || profile.email || 'Usuário sem nome',
+        email: profile.email || 'Email não informado',
         plano: (profile.plano || 'gratuito') as Usuario['plano'],
         status: (profile.status || 'ativo') as Usuario['status'],
-        dataRegistro: profile.created_at,
-        ultimoAcesso: profile.updated_at
+        dataRegistro: profile.created_at || new Date().toISOString(),
+        ultimoAcesso: profile.updated_at || new Date().toISOString()
       }));
       
       setUsuarios(usuariosFormatados);
@@ -91,11 +91,11 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const bloquearUsuario = (id: string) => {
-    atualizarUsuario(id, { status: 'Bloqueado' });
+    atualizarUsuario(id, { status: 'bloqueado' });
   };
 
   const desbloquearUsuario = (id: string) => {
-    atualizarUsuario(id, { status: 'Ativo' });
+    atualizarUsuario(id, { status: 'ativo' });
   };
 
   const alterarPlano = (id: string, novoPlano: Usuario['plano']) => {

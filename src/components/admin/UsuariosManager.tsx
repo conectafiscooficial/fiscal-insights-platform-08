@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Users, Plus, Pencil, Trash2, Search, Filter } from "lucide-react";
+import { Users, Plus, Pencil, Trash2, Search, Filter, Check, X, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,21 +17,27 @@ const UsuariosManager = () => {
   const { usuarios, adicionarUsuario, atualizarUsuario, removerUsuario } = useUsuarios();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterPlano, setFilterPlano] = useState("todos");
+  const [filterStatus, setFilterStatus] = useState("todos");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<Usuario | null>(null);
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
     plano: "gratuito" as Usuario['plano'],
-    status: "Ativo" as Usuario['status']
+    status: "ativo" as Usuario['status']
   });
 
   const usuariosFiltrados = usuarios.filter(usuario => {
     const matchesSearch = usuario.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          usuario.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterPlano === "todos" || usuario.plano === filterPlano;
-    return matchesSearch && matchesFilter;
+    const matchesStatus = filterStatus === "todos" || usuario.status === filterStatus;
+    return matchesSearch && matchesFilter && matchesStatus;
   });
+
+  // Separar usuários pendentes para destaque
+  const usuariosPendentes = usuariosFiltrados.filter(u => u.status === "pendente");
+  const usuariosAtivos = usuariosFiltrados.filter(u => u.status !== "pendente");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +56,7 @@ const UsuariosManager = () => {
     
     setIsDialogOpen(false);
     setEditingUser(null);
-    setFormData({ nome: "", email: "", plano: "gratuito", status: "Ativo" });
+    setFormData({ nome: "", email: "", plano: "gratuito", status: "ativo" });
   };
 
   const handleEdit = (usuario: Usuario) => {
@@ -71,9 +77,36 @@ const UsuariosManager = () => {
     }
   };
 
+  const handleApprove = (id: string) => {
+    atualizarUsuario(id, { status: "ativo" });
+    toast({ title: "Usuário aprovado com sucesso!" });
+  };
+
+  const handleReject = (id: string) => {
+    if (confirm("Tem certeza que deseja rejeitar esta solicitação?")) {
+      atualizarUsuario(id, { status: "rejeitado" });
+      toast({ title: "Solicitação rejeitada." });
+    }
+  };
+
   const resetForm = () => {
     setEditingUser(null);
-    setFormData({ nome: "", email: "", plano: "gratuito", status: "Ativo" });
+    setFormData({ nome: "", email: "", plano: "gratuito", status: "ativo" });
+  };
+
+  const getStatusBadge = (status: Usuario['status']) => {
+    switch (status) {
+      case "ativo":
+        return <Badge className="bg-green-100 text-green-800">Ativo</Badge>;
+      case "pendente":
+        return <Badge className="bg-yellow-100 text-yellow-800">Pendente</Badge>;
+      case "bloqueado":
+        return <Badge className="bg-red-100 text-red-800">Bloqueado</Badge>;
+      case "rejeitado":
+        return <Badge className="bg-gray-100 text-gray-800">Rejeitado</Badge>;
+      default:
+        return <Badge variant="secondary">{status}</Badge>;
+    }
   };
 
   return (
@@ -82,6 +115,11 @@ const UsuariosManager = () => {
         <h2 className="text-xl font-semibold text-slate-800 flex items-center space-x-2">
           <Users className="w-5 h-5" />
           <span>Gestão de Usuários</span>
+          {usuariosPendentes.length > 0 && (
+            <Badge className="bg-yellow-100 text-yellow-800 ml-2">
+              {usuariosPendentes.length} pendente{usuariosPendentes.length > 1 ? 's' : ''}
+            </Badge>
+          )}
         </h2>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -129,9 +167,9 @@ const UsuariosManager = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="gratuito">Gratuito</SelectItem>
-                    <SelectItem value="Básico">Básico</SelectItem>
-                    <SelectItem value="Premium">Premium</SelectItem>
-                    <SelectItem value="Corporativo">Corporativo</SelectItem>
+                    <SelectItem value="basico">Básico</SelectItem>
+                    <SelectItem value="premium">Premium</SelectItem>
+                    <SelectItem value="corporativo">Corporativo</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -146,9 +184,10 @@ const UsuariosManager = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Ativo">Ativo</SelectItem>
-                    <SelectItem value="Pendente">Pendente</SelectItem>
-                    <SelectItem value="Bloqueado">Bloqueado</SelectItem>
+                    <SelectItem value="ativo">Ativo</SelectItem>
+                    <SelectItem value="pendente">Pendente</SelectItem>
+                    <SelectItem value="bloqueado">Bloqueado</SelectItem>
+                    <SelectItem value="rejeitado">Rejeitado</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -188,12 +227,86 @@ const UsuariosManager = () => {
           <SelectContent>
             <SelectItem value="todos">Todos os Planos</SelectItem>
             <SelectItem value="gratuito">Gratuito</SelectItem>
-            <SelectItem value="Básico">Básico</SelectItem>
-            <SelectItem value="Premium">Premium</SelectItem>
-            <SelectItem value="Corporativo">Corporativo</SelectItem>
+            <SelectItem value="basico">Básico</SelectItem>
+            <SelectItem value="premium">Premium</SelectItem>
+            <SelectItem value="corporativo">Corporativo</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={filterStatus} onValueChange={setFilterStatus}>
+          <SelectTrigger className="w-48">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="todos">Todos Status</SelectItem>
+            <SelectItem value="ativo">Ativo</SelectItem>
+            <SelectItem value="pendente">Pendente</SelectItem>
+            <SelectItem value="bloqueado">Bloqueado</SelectItem>
+            <SelectItem value="rejeitado">Rejeitado</SelectItem>
           </SelectContent>
         </Select>
       </div>
+
+      {/* Solicitações Pendentes */}
+      {usuariosPendentes.length > 0 && (
+        <Card className="border-yellow-200 bg-yellow-50">
+          <CardHeader>
+            <CardTitle className="flex items-center text-yellow-800">
+              <Clock className="w-5 h-5 mr-2" />
+              Solicitações de Assinatura Pendentes ({usuariosPendentes.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Plano Solicitado</TableHead>
+                  <TableHead>Data</TableHead>
+                  <TableHead>Ações</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {usuariosPendentes.map((usuario) => (
+                  <TableRow key={usuario.id} className="bg-white">
+                    <TableCell className="font-medium">{usuario.nome}</TableCell>
+                    <TableCell>{usuario.email}</TableCell>
+                    <TableCell>
+                      <Badge variant={usuario.plano === "premium" ? "default" : "secondary"}>
+                        {usuario.plano}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(usuario.dataRegistro).toLocaleDateString('pt-BR')}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex space-x-2">
+                        <Button
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700"
+                          onClick={() => handleApprove(usuario.id)}
+                        >
+                          <Check className="w-3 h-3 mr-1" />
+                          Aprovar
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-red-600 border-red-200 hover:bg-red-50"
+                          onClick={() => handleReject(usuario.id)}
+                        >
+                          <X className="w-3 h-3 mr-1" />
+                          Rejeitar
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Tabela de Usuários */}
       <Card>
@@ -211,20 +324,16 @@ const UsuariosManager = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {usuariosFiltrados.map((usuario) => (
+              {usuariosAtivos.map((usuario) => (
                 <TableRow key={usuario.id}>
                   <TableCell className="font-medium">{usuario.nome}</TableCell>
                   <TableCell>{usuario.email}</TableCell>
                   <TableCell>
-                    <Badge variant={usuario.plano === "Premium" ? "default" : "secondary"}>
+                    <Badge variant={usuario.plano === "premium" ? "default" : "secondary"}>
                       {usuario.plano}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    <Badge variant={usuario.status === "Ativo" ? "default" : "secondary"}>
-                      {usuario.status}
-                    </Badge>
-                  </TableCell>
+                  <TableCell>{getStatusBadge(usuario.status)}</TableCell>
                   <TableCell>
                     {new Date(usuario.dataRegistro).toLocaleDateString('pt-BR')}
                   </TableCell>

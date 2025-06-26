@@ -1,32 +1,39 @@
+
 import { HelpCircle, MessageCircle, Phone, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import EmailSupportForm from "@/components/forms/EmailSupportForm";
 
 const Suporte = () => {
+  const [showEmailForm, setShowEmailForm] = useState(false);
+
   const canaisSuposte = [
     {
       titulo: "Chat Online",
       descricao: "Atendimento em tempo real",
       icone: MessageCircle,
       disponibilidade: "Seg-Sex: 8h às 18h",
-      cor: "from-blue-500 to-blue-600"
+      cor: "from-blue-500 to-blue-600",
+      action: () => window.open("https://wa.me/5515997625135", "_blank")
     },
     {
       titulo: "Telefone",
       descricao: "Suporte via telefone",
       icone: Phone,
-      disponibilidade: "(11) 3000-0000",
-      cor: "from-emerald-500 to-emerald-600"
+      disponibilidade: "(15) 3013-7302",
+      cor: "from-emerald-500 to-emerald-600",
+      action: () => window.open("tel:1530137302", "_self")
     },
     {
       titulo: "E-mail",
       descricao: "Envie sua dúvida por e-mail",
       icone: Mail,
       disponibilidade: "suporte@conectafisco.com.br",
-      cor: "from-purple-500 to-purple-600"
+      cor: "from-purple-500 to-purple-600",
+      action: () => setShowEmailForm(true)
     }
   ];
 
@@ -80,6 +87,7 @@ const Suporte = () => {
                     <p className="text-sm text-slate-600 mb-4">{canal.disponibilidade}</p>
                     <Button 
                       className={`w-full bg-gradient-to-r ${canal.cor} hover:opacity-90`}
+                      onClick={canal.action}
                     >
                       Iniciar Contato
                     </Button>
@@ -171,6 +179,14 @@ const Suporte = () => {
           </Card>
         </div>
       </div>
+
+      {/* Modal do formulário de e-mail */}
+      {showEmailForm && (
+        <EmailSupportForm 
+          isOpen={showEmailForm} 
+          onClose={() => setShowEmailForm(false)} 
+        />
+      )}
     </div>
   );
 };
