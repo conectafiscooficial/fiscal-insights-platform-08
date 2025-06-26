@@ -1,14 +1,12 @@
+
 import { BookOpen, Users, Clock, Award } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Cursos = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const categorias = [
     {
       titulo: "Cursos EAD",
@@ -59,7 +57,7 @@ const Cursos = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <Header />
       
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
