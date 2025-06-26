@@ -9,7 +9,81 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      matriculas: {
+        Row: {
+          created_at: string | null
+          dados_matricula: Json | null
+          id: string
+          nome_curso: string
+          status: string | null
+          tipo_curso: string
+          user_id: string | null
+          valor: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          dados_matricula?: Json | null
+          id?: string
+          nome_curso: string
+          status?: string | null
+          tipo_curso: string
+          user_id?: string | null
+          valor?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          dados_matricula?: Json | null
+          id?: string
+          nome_curso?: string
+          status?: string | null
+          tipo_curso?: string
+          user_id?: string | null
+          valor?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          documento: string | null
+          email: string | null
+          empresa: string | null
+          id: string
+          nome_completo: string | null
+          plano: string | null
+          status: string | null
+          telefone: string | null
+          tipo_pessoa: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          documento?: string | null
+          email?: string | null
+          empresa?: string | null
+          id: string
+          nome_completo?: string | null
+          plano?: string | null
+          status?: string | null
+          telefone?: string | null
+          tipo_pessoa?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          documento?: string | null
+          email?: string | null
+          empresa?: string | null
+          id?: string
+          nome_completo?: string | null
+          plano?: string | null
+          status?: string | null
+          telefone?: string | null
+          tipo_pessoa?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
