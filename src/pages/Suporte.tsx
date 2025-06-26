@@ -1,4 +1,3 @@
-
 import { HelpCircle, MessageCircle, Phone, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -180,13 +179,10 @@ const Suporte = () => {
         </div>
       </div>
 
-      {/* Modal do formulário de e-mail */}
-      {showEmailForm && (
-        <EmailSupportForm 
-          isOpen={showEmailForm} 
-          onClose={() => setShowEmailForm(false)} 
-        />
-      )}
+      <EmailSupportForm 
+        isOpen={showEmailForm} 
+        onClose={() => setShowEmailForm(false)} 
+      />
     </div>
   );
 };

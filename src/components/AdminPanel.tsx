@@ -6,12 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { AdminProvider, useAdmin } from "@/contexts/AdminContext";
+import { UsuariosProvider } from "@/contexts/UsuariosContext";
 import IndicesEconomicosManager from "./admin/IndicesEconomicosManager";
 import UsuariosManager from "./admin/UsuariosManager";
 import ConteudoManager from "./admin/ConteudoManager";
 import CursosManager from "./admin/CursosManager";
 import VendasManager from "./admin/VendasManager";
 import ConfiguracoesManager from "./admin/ConfiguracoesManager";
+import NotificationBadge from "./admin/NotificationBadge";
 
 const AdminPanelContent = () => {
   const { artigos, indices, linksExternos, usuarios, cursos, vendas } = useAdmin();
@@ -46,6 +48,7 @@ const AdminPanelContent = () => {
             <h1 className="text-3xl font-bold text-slate-800">Painel Administrativo</h1>
             <p className="text-slate-600 mt-1">Gerencie sua plataforma fiscal</p>
           </div>
+          <NotificationBadge />
         </div>
 
         {/* Stats Cards */}
@@ -164,7 +167,9 @@ const AdminPanelContent = () => {
 const AdminPanel = () => {
   return (
     <AdminProvider>
-      <AdminPanelContent />
+      <UsuariosProvider>
+        <AdminPanelContent />
+      </UsuariosProvider>
     </AdminProvider>
   );
 };

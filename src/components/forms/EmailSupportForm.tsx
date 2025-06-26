@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from '@/integrations/supabase/client';
 
 interface EmailSupportFormProps {
   isOpen: boolean;
@@ -32,9 +33,17 @@ const EmailSupportForm = ({ isOpen, onClose }: EmailSupportFormProps) => {
     setIsSubmitting(true);
     
     try {
-      // Aqui você poderia integrar com um serviço de e-mail
-      // Por enquanto, vou simular o envio
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          nome: formData.nome,
+          email: formData.email,
+          assunto: formData.assunto,
+          mensagem: formData.mensagem,
+          tipo: 'Suporte'
+        }
+      });
+
+      if (error) throw error;
       
       toast({
         title: "Mensagem enviada!",
@@ -44,6 +53,7 @@ const EmailSupportForm = ({ isOpen, onClose }: EmailSupportFormProps) => {
       setFormData({ nome: '', email: '', assunto: '', mensagem: '' });
       onClose();
     } catch (error) {
+      console.error('Erro ao enviar email:', error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar sua mensagem. Tente novamente.",

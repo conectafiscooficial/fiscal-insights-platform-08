@@ -13,6 +13,7 @@ interface UsuariosContextType {
   desbloquearUsuario: (id: string) => void;
   alterarPlano: (id: string, novoPlano: Usuario['plano']) => void;
   carregarUsuarios: () => Promise<void>;
+  pendingCount: number;
 }
 
 const UsuariosContext = createContext<UsuariosContextType | undefined>(undefined);
@@ -27,6 +28,7 @@ export const useUsuarios = () => {
 
 export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [pendingCount, setPendingCount] = useState(0);
 
   const carregarUsuarios = async () => {
     try {
@@ -47,21 +49,58 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
       }));
       
       setUsuarios(usuariosFormatados);
+      setPendingCount(usuariosFormatados.filter(u => u.status === 'pendente').length);
     } catch (error) {
       console.error('Erro ao carregar usuários:', error);
     }
   };
 
-  useEffect(() => {
-    carregarUsuarios();
-  }, []);
+  const enviarNotificacao = async (tipo: string, dadosUsuario: Usuario, isNewUser = false) => {
+    try {
+      if (isNewUser) {
+        // Notificar admin sobre nova solicitação
+        await supabase.functions.invoke('send-notification-email', {
+          body: {
+            tipo: 'nova-solicitacao',
+            dadosUsuario: {
+              nome: dadosUsuario.nome,
+              email: dadosUsuario.email,
+              plano: dadosUsuario.plano,
+              documento: dadosUsuario.documento || 'Não informado',
+              empresa: dadosUsuario.empresa || 'Não informado'
+            }
+          }
+        });
+      } else {
+        // Notificar usuário sobre aprovação/rejeição
+        await supabase.functions.invoke('send-notification-email', {
+          body: {
+            tipo,
+            dadosUsuario: {
+              nome: dadosUsuario.nome,
+              email: dadosUsuario.email,
+              plano: dadosUsuario.plano
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao enviar notificação:', error);
+    }
+  };
 
-  const adicionarUsuario = (usuario: Omit<Usuario, 'id'>) => {
+  const adicionarUsuario = async (usuario: Omit<Usuario, 'id'>) => {
     const novoUsuario: Usuario = {
       ...usuario,
       id: Date.now().toString()
     };
     setUsuarios(prev => [...prev, novoUsuario]);
+    
+    // Enviar notificação para admin sobre nova solicitação
+    if (usuario.status === 'pendente') {
+      await enviarNotificacao('nova-solicitacao', novoUsuario, true);
+      setPendingCount(prev => prev + 1);
+    }
   };
 
   const atualizarUsuario = async (id: string, dados: Partial<Usuario>) => {
@@ -78,15 +117,36 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
       
       if (error) throw error;
       
+      const usuarioAtual = usuarios.find(u => u.id === id);
+      const statusAnterior = usuarioAtual?.status;
+      
       setUsuarios(prev => prev.map(usuario => 
         usuario.id === id ? { ...usuario, ...dados } : usuario
       ));
+
+      // Enviar notificação se o status mudou de pendente para aprovado/rejeitado
+      if (statusAnterior === 'pendente' && dados.status && dados.status !== 'pendente') {
+        const usuarioAtualizado = usuarios.find(u => u.id === id);
+        if (usuarioAtualizado) {
+          const tipoNotificacao = dados.status === 'ativo' ? 'aprovacao' : 'rejeicao';
+          await enviarNotificacao(tipoNotificacao, { ...usuarioAtualizado, ...dados });
+        }
+        
+        // Atualizar contador de pendentes
+        if (dados.status === 'ativo' || dados.status === 'rejeitado') {
+          setPendingCount(prev => Math.max(0, prev - 1));
+        }
+      }
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
     }
   };
 
   const removerUsuario = (id: string) => {
+    const usuario = usuarios.find(u => u.id === id);
+    if (usuario?.status === 'pendente') {
+      setPendingCount(prev => Math.max(0, prev - 1));
+    }
     setUsuarios(prev => prev.filter(usuario => usuario.id !== id));
   };
 
@@ -102,6 +162,10 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
     atualizarUsuario(id, { plano: novoPlano });
   };
 
+  useEffect(() => {
+    carregarUsuarios();
+  }, []);
+
   const value: UsuariosContextType = {
     usuarios,
     setUsuarios,
@@ -111,7 +175,8 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
     bloquearUsuario,
     desbloquearUsuario,
     alterarPlano,
-    carregarUsuarios
+    carregarUsuarios,
+    pendingCount
   };
 
   return (
