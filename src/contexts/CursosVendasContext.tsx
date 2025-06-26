@@ -27,13 +27,63 @@ export const useCursosVendas = () => {
 
 export const CursosVendasProvider = ({ children }: { children: ReactNode }) => {
   const [cursos, setCursos] = useState<Curso[]>([
-    { id: '1', titulo: 'eSocial Completo 2024', descricao: 'Curso completo sobre eSocial', categoria: 'Trabalho', instrutor: 'Dr. Carlos Silva', duracao: 40, preco: 299.90, status: 'ativo', dataLancamento: '2024-01-01', alunos: 150, avaliacoes: 4.8 },
-    { id: '2', titulo: 'SPED Fiscal Avançado', descricao: 'Curso avançado de SPED Fiscal', categoria: 'SPED', instrutor: 'Dra. Ana Costa', duracao: 30, preco: 199.90, status: 'ativo', dataLancamento: '2024-01-05', alunos: 89, avaliacoes: 4.9 }
+    { 
+      id: '1', 
+      nome: 'eSocial Completo 2024',
+      titulo: 'eSocial Completo 2024', 
+      descricao: 'Curso completo sobre eSocial', 
+      categoria: 'Trabalho', 
+      instrutor: 'Dr. Carlos Silva', 
+      duracao: 40, 
+      preco: 299.90, 
+      status: 'ativo', 
+      dataLancamento: '2024-01-01', 
+      totalAlunos: 150,
+      alunos: 150, 
+      avaliacoes: 4.8 
+    },
+    { 
+      id: '2', 
+      nome: 'SPED Fiscal Avançado',
+      titulo: 'SPED Fiscal Avançado', 
+      descricao: 'Curso avançado de SPED Fiscal', 
+      categoria: 'SPED', 
+      instrutor: 'Dra. Ana Costa', 
+      duracao: 30, 
+      preco: 199.90, 
+      status: 'ativo', 
+      dataLancamento: '2024-01-05', 
+      totalAlunos: 89,
+      alunos: 89, 
+      avaliacoes: 4.9 
+    }
   ]);
 
   const [vendas, setVendas] = useState<Venda[]>([
-    { id: '1', produto: 'eSocial Completo 2024', cliente: 'João Silva', email: 'joao@email.com', valor: 299.90, status: 'concluida', dataVenda: '2024-01-15', tipoProduto: 'curso' },
-    { id: '2', produto: 'Consultoria ICMS', cliente: 'Maria Santos', email: 'maria@email.com', valor: 1500.00, status: 'pendente', dataVenda: '2024-01-14', tipoProduto: 'consultoria' }
+    { 
+      id: '1', 
+      produto: 'eSocial Completo 2024', 
+      cliente: 'João Silva', 
+      email: 'joao@email.com', 
+      valor: 299.90, 
+      status: 'pago', 
+      data: '2024-01-15',
+      dataVenda: '2024-01-15', 
+      tipoProduto: 'curso',
+      formaPagamento: 'cartao'
+    },
+    { 
+      id: '2', 
+      produto: 'Consultoria ICMS', 
+      cliente: 'Maria Santos', 
+      email: 'maria@email.com', 
+      valor: 1500.00, 
+      status: 'pendente', 
+      data: '2024-01-14',
+      dataVenda: '2024-01-14', 
+      tipoProduto: 'consultoria',
+      formaPagamento: 'transferencia'
+    }
   ]);
 
   const adicionarCurso = (curso: Omit<Curso, 'id'>) => {

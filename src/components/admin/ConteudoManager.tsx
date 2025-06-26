@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { FileText, Plus, Pencil, Trash2, Search, Filter, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +26,7 @@ const ConteudoManager = () => {
     conteudo: "",
     categoria: "Federal",
     autor: "",
-    status: "rascunho" as "publicado" | "rascunho" | "revisao",
+    status: "rascunho" as "publicado" | "rascunho" | "revisao" | "arquivado",
     tags: "",
     secaoTematica: ""
   });
@@ -43,7 +44,8 @@ const ConteudoManager = () => {
     const artigoData = {
       ...formData,
       tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0),
-      dataPublicacao: editingArtigo?.dataPublicacao || new Date().toISOString()
+      dataPublicacao: editingArtigo?.dataPublicacao || new Date().toISOString(),
+      visualizacoes: editingArtigo?.visualizacoes || 0
     };
     
     if (editingArtigo) {
@@ -180,7 +182,7 @@ const ConteudoManager = () => {
                   <Label htmlFor="status">Status</Label>
                   <Select
                     value={formData.status}
-                    onValueChange={(value: "publicado" | "rascunho" | "revisao") => 
+                    onValueChange={(value: "publicado" | "rascunho" | "revisao" | "arquivado") => 
                       setFormData({...formData, status: value})}
                   >
                     <SelectTrigger>
@@ -190,6 +192,7 @@ const ConteudoManager = () => {
                       <SelectItem value="rascunho">Rascunho</SelectItem>
                       <SelectItem value="revisao">Em Revisão</SelectItem>
                       <SelectItem value="publicado">Publicado</SelectItem>
+                      <SelectItem value="arquivado">Arquivado</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

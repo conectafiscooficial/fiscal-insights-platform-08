@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { BookOpen, Plus, Pencil, Trash2, Search, Filter, Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,17 +21,18 @@ const CursosManager = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCurso, setEditingCurso] = useState<Curso | null>(null);
   const [formData, setFormData] = useState({
+    nome: "",
     titulo: "",
     descricao: "",
     categoria: "",
     instrutor: "",
     duracao: 0,
     preco: 0,
-    status: "rascunho" as "ativo" | "inativo" | "rascunho"
+    status: "ativo" as "ativo" | "inativo"
   });
 
   const cursosFiltrados = cursos.filter(curso => {
-    const matchesSearch = curso.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = curso.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          curso.instrutor.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterCategoria === "todas" || curso.categoria === filterCategoria;
     return matchesSearch && matchesFilter;
@@ -48,6 +50,7 @@ const CursosManager = () => {
       adicionarCurso({
         ...formData,
         dataLancamento: new Date().toISOString(),
+        totalAlunos: 0,
         alunos: 0,
         avaliacoes: 0
       });
@@ -62,6 +65,7 @@ const CursosManager = () => {
   const handleEdit = (curso: Curso) => {
     setEditingCurso(curso);
     setFormData({
+      nome: curso.nome,
       titulo: curso.titulo,
       descricao: curso.descricao,
       categoria: curso.categoria,
@@ -83,13 +87,14 @@ const CursosManager = () => {
   const resetForm = () => {
     setEditingCurso(null);
     setFormData({
+      nome: "",
       titulo: "",
       descricao: "",
       categoria: "",
       instrutor: "",
       duracao: 0,
       preco: 0,
-      status: "rascunho"
+      status: "ativo"
     });
   };
 
@@ -115,6 +120,16 @@ const CursosManager = () => {
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="nome">Nome do Curso</Label>
+                <Input
+                  id="nome"
+                  value={formData.nome}
+                  onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                  required
+                />
+              </div>
+
               <div>
                 <Label htmlFor="titulo">Título do Curso</Label>
                 <Input
@@ -187,14 +202,13 @@ const CursosManager = () => {
                   <Label htmlFor="status">Status</Label>
                   <Select
                     value={formData.status}
-                    onValueChange={(value: "ativo" | "inativo" | "rascunho") => 
+                    onValueChange={(value: "ativo" | "inativo") => 
                       setFormData({...formData, status: value})}
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="rascunho">Rascunho</SelectItem>
                       <SelectItem value="ativo">Ativo</SelectItem>
                       <SelectItem value="inativo">Inativo</SelectItem>
                     </SelectContent>
@@ -267,7 +281,7 @@ const CursosManager = () => {
               {cursosFiltrados.map((curso) => (
                 <TableRow key={curso.id}>
                   <TableCell className="font-medium max-w-xs truncate">
-                    {curso.titulo}
+                    {curso.nome}
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline">{curso.categoria}</Badge>

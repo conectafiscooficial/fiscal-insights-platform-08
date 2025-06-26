@@ -9,11 +9,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useAdmin, Venda } from "@/contexts/AdminContext";
+import { useCursosVendas } from "@/contexts/CursosVendasContext";
+import { Venda } from "@/types/admin";
 import { toast } from "@/hooks/use-toast";
 
 const VendasManager = () => {
-  const { vendas, adicionarVenda, atualizarVenda } = useAdmin();
+  const { vendas, adicionarVenda, atualizarVenda } = useCursosVendas();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("todas");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -22,8 +23,9 @@ const VendasManager = () => {
     cliente: "",
     email: "",
     valor: 0,
-    status: "pendente" as "concluida" | "pendente" | "cancelada",
-    tipoProduto: "curso" as "curso" | "consultoria" | "software" | "material"
+    status: "pendente" as "pendente" | "pago" | "cancelado" | "concluida" | "cancelada",
+    tipoProduto: "curso" as "curso" | "consultoria" | "software" | "material",
+    formaPagamento: "cartao"
   });
 
   const vendasFiltradas = vendas.filter(venda => {
@@ -35,10 +37,10 @@ const VendasManager = () => {
 
   // Estatísticas
   const totalVendas = vendas.reduce((sum, venda) => 
-    venda.status === 'concluida' ? sum + venda.valor : sum, 0
+    venda.status === 'pago' || venda.status === 'concluida' ? sum + venda.valor : sum, 0
   );
   const vendasPendentes = vendas.filter(v => v.status === 'pendente').length;
-  const vendasConcluidas = vendas.filter(v => v.status === 'concluida').length;
+  const vendasConcluidas = vendas.filter(v => v.status === 'pago' || v.status === 'concluida').length;
   const vendasMes = vendas.filter(v => {
     const dataVenda = new Date(v.dataVenda);
     const agora = new Date();
@@ -51,6 +53,7 @@ const VendasManager = () => {
     
     adicionarVenda({
       ...formData,
+      data: new Date().toISOString(),
       dataVenda: new Date().toISOString()
     });
     
@@ -59,7 +62,7 @@ const VendasManager = () => {
     resetForm();
   };
 
-  const handleStatusChange = (id: string, novoStatus: "concluida" | "pendente" | "cancelada") => {
+  const handleStatusChange = (id: string, novoStatus: "pendente" | "pago" | "cancelado" | "concluida" | "cancelada") => {
     atualizarVenda(id, { status: novoStatus });
     toast({ title: "Status da venda atualizado!" });
   };
@@ -71,7 +74,8 @@ const VendasManager = () => {
       email: "",
       valor: 0,
       status: "pendente",
-      tipoProduto: "curso"
+      tipoProduto: "curso",
+      formaPagamento: "cartao"
     });
   };
 
@@ -217,7 +221,7 @@ const VendasManager = () => {
                   <Label htmlFor="status">Status</Label>
                   <Select
                     value={formData.status}
-                    onValueChange={(value: "concluida" | "pendente" | "cancelada") => 
+                    onValueChange={(value: "pendente" | "pago" | "cancelado" | "concluida" | "cancelada") => 
                       setFormData({...formData, status: value})}
                   >
                     <SelectTrigger>
@@ -225,7 +229,9 @@ const VendasManager = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="pendente">Pendente</SelectItem>
+                      <SelectItem value="pago">Pago</SelectItem>
                       <SelectItem value="concluida">Concluída</SelectItem>
+                      <SelectItem value="cancelado">Cancelado</SelectItem>
                       <SelectItem value="cancelada">Cancelada</SelectItem>
                     </SelectContent>
                   </Select>
@@ -265,7 +271,9 @@ const VendasManager = () => {
           <SelectContent>
             <SelectItem value="todas">Todos os Status</SelectItem>
             <SelectItem value="pendente">Pendente</SelectItem>
+            <SelectItem value="pago">Pago</SelectItem>
             <SelectItem value="concluida">Concluída</SelectItem>
+            <SelectItem value="cancelado">Cancelado</SelectItem>
             <SelectItem value="cancelada">Cancelada</SelectItem>
           </SelectContent>
         </Select>
@@ -300,7 +308,7 @@ const VendasManager = () => {
                   <TableCell>
                     <Select
                       value={venda.status}
-                      onValueChange={(value: "concluida" | "pendente" | "cancelada") => 
+                      onValueChange={(value: "pendente" | "pago" | "cancelado" | "concluida" | "cancelada") => 
                         handleStatusChange(venda.id, value)}
                     >
                       <SelectTrigger className="w-32">
@@ -308,7 +316,9 @@ const VendasManager = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="pendente">Pendente</SelectItem>
+                        <SelectItem value="pago">Pago</SelectItem>
                         <SelectItem value="concluida">Concluída</SelectItem>
+                        <SelectItem value="cancelado">Cancelado</SelectItem>
                         <SelectItem value="cancelada">Cancelada</SelectItem>
                       </SelectContent>
                     </Select>

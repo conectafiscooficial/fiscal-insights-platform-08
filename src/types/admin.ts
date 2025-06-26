@@ -17,7 +17,7 @@ export interface Artigo {
   categoria: string;
   autor: string;
   dataPublicacao: string;
-  status: 'rascunho' | 'publicado' | 'arquivado';
+  status: 'rascunho' | 'publicado' | 'arquivado' | 'revisao';
   visualizacoes: number;
   tags: string[];
   secaoTematica: string;
@@ -48,24 +48,30 @@ export interface IndiceEconomico {
 export interface Curso {
   id: string;
   nome: string;
+  titulo: string;
   descricao: string;
   categoria: string;
   preco: number;
-  duracao: string;
+  duracao: number;
   instrutor: string;
   status: 'ativo' | 'inativo';
   dataLancamento: string;
   totalAlunos: number;
+  alunos: number;
+  avaliacoes: number;
 }
 
 export interface Venda {
   id: string;
   produto: string;
   cliente: string;
+  email: string;
   valor: number;
   data: string;
-  status: 'pendente' | 'pago' | 'cancelado';
+  dataVenda: string;
+  status: 'pendente' | 'pago' | 'cancelado' | 'concluida' | 'cancelada';
   formaPagamento: string;
+  tipoProduto: 'curso' | 'consultoria' | 'software' | 'material';
 }
 
 export interface Configuracao {

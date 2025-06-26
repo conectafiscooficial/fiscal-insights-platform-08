@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,8 +20,10 @@ const IndicesEconomicosManager = () => {
     valor: '',
     variacao: '',
     tipo: 'neutro',
-    ultimaAtualizacao: '',
-    fonte: ''
+    dataAtualizacao: '',
+    fonte: '',
+    categoria: '',
+    unidade: ''
   });
   const [mostrandoConfig, setMostrandoConfig] = useState(false);
 
@@ -61,7 +64,7 @@ const IndicesEconomicosManager = () => {
 
     adicionarIndice({
       ...novoIndice,
-      ultimaAtualizacao: new Date().toISOString()
+      dataAtualizacao: new Date().toISOString()
     });
 
     setNovoIndice({
@@ -69,8 +72,10 @@ const IndicesEconomicosManager = () => {
       valor: '',
       variacao: '',
       tipo: 'neutro',
-      ultimaAtualizacao: '',
-      fonte: ''
+      dataAtualizacao: '',
+      fonte: '',
+      categoria: '',
+      unidade: ''
     });
 
     toast({
@@ -131,7 +136,7 @@ const IndicesEconomicosManager = () => {
         </TableCell>
         <TableCell>
           <span className="text-xs text-slate-600">
-            {new Date(editedIndice.ultimaAtualizacao).toLocaleString('pt-BR')}
+            {new Date(editedIndice.dataAtualizacao).toLocaleString('pt-BR')}
           </span>
         </TableCell>
         <TableCell>
@@ -324,7 +329,7 @@ const IndicesEconomicosManager = () => {
                     <TableCell>{indice.fonte}</TableCell>
                     <TableCell>
                       <span className="text-xs text-slate-600">
-                        {new Date(indice.ultimaAtualizacao).toLocaleString('pt-BR')}
+                        {new Date(indice.dataAtualizacao).toLocaleString('pt-BR')}
                       </span>
                     </TableCell>
                     <TableCell>
