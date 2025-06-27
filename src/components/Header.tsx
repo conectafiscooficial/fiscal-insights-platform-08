@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Phone, Mail, User, Menu } from "lucide-react";
@@ -18,10 +17,6 @@ const Header = () => {
       <div className="bg-slate-700 text-white py-2">
         <div className="container mx-auto px-4 flex justify-between items-center text-sm">
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-1">
-              <Phone className="w-3 h-3" />
-              <span>(15) 30137302</span>
-            </div>
             <div className="flex items-center space-x-1">
               <Mail className="w-3 h-3" />
               <span>contato@conectafisco.com</span>
