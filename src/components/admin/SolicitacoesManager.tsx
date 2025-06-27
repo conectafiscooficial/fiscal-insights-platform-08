@@ -39,8 +39,8 @@ const SolicitacoesManager = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setSolicitacoes(data || []);
-      setFilteredSolicitacoes(data || []);
+      setSolicitacoes((data || []) as SolicitacaoOrcamento[]);
+      setFilteredSolicitacoes((data || []) as SolicitacaoOrcamento[]);
     } catch (error) {
       console.error('Erro ao carregar solicitações:', error);
       toast({
