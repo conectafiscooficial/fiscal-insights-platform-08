@@ -1,4 +1,3 @@
-
 import { Clock, MapPin, TrendingUp, FileText, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,10 +8,8 @@ import AssinaturaPremiumForm from "./forms/AssinaturaPremiumForm";
 
 const ContentFeeds = () => {
   const [formOpen, setFormOpen] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState("");
 
-  const handleProtectedClick = (menuTitle: string) => {
-    setSelectedMenu(menuTitle);
+  const handleProtectedClick = () => {
     setFormOpen(true);
   };
 
@@ -97,7 +94,7 @@ const ContentFeeds = () => {
                     variant="outline" 
                     size="sm" 
                     className="ml-4"
-                    onClick={() => handleProtectedClick("Busca Avançada de Atos e Legislação")}
+                    onClick={handleProtectedClick}
                   >
                     Busca Avançada 🔐
                   </Button>
@@ -136,7 +133,7 @@ const ContentFeeds = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handleProtectedClick("Ler Completo")}
+                      onClick={handleProtectedClick}
                     >
                       <ExternalLink className="w-3 h-3 mr-2" />
                       Ler Completo 🔐
@@ -193,7 +190,6 @@ const ContentFeeds = () => {
       <AssinaturaPremiumForm
         isOpen={formOpen}
         onClose={() => setFormOpen(false)}
-        menuTitle={selectedMenu}
       />
     </>
   );

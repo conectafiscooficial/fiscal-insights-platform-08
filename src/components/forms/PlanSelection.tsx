@@ -23,7 +23,14 @@ const PlanSelection = ({ selectedPlan, onPlanChange }: PlanSelectionProps) => {
           .order('preco', { ascending: true });
         
         if (error) throw error;
-        setPlanos(data || []);
+        
+        // Cast the data to ensure tipo is the correct type
+        const planosData = (data || []).map(plano => ({
+          ...plano,
+          tipo: plano.tipo as 'fixo' | 'orcamento'
+        })) as PlanoAssinatura[];
+        
+        setPlanos(planosData);
       } catch (error) {
         console.error('Erro ao carregar planos:', error);
       }

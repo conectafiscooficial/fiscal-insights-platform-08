@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Mail, MessageCircle, MessageSquare, Phone } from "lucide-react";
 
 const Suporte = () => {
@@ -29,15 +31,6 @@ const Suporte = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg">
-                <Phone className="w-5 h-5 text-blue-600" />
-                <div>
-                  <h4 className="font-medium">Telefone</h4>
-                  <p className="text-slate-600">(15) 3013-7302</p>
-                  <p className="text-sm text-slate-500">Seg a Sex, 8h às 18h</p>
-                </div>
-              </div>
-
               <div className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg">
                 <MessageCircle className="w-5 h-5 text-green-600" />
                 <div>
