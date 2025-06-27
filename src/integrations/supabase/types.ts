@@ -42,12 +42,73 @@ export type Database = {
         }
         Relationships: []
       }
+      planilhas_mensais: {
+        Row: {
+          ano: number
+          arquivo_url: string
+          created_at: string | null
+          descricao: string | null
+          id: string
+          mes: number
+        }
+        Insert: {
+          ano: number
+          arquivo_url: string
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          mes: number
+        }
+        Update: {
+          ano?: number
+          arquivo_url?: string
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          mes?: number
+        }
+        Relationships: []
+      }
+      planos_assinatura: {
+        Row: {
+          ativo: boolean | null
+          created_at: string | null
+          descricao: string | null
+          id: string
+          nome: string
+          preco: number | null
+          recursos: Json | null
+          tipo: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          nome: string
+          preco?: number | null
+          recursos?: Json | null
+          tipo: string
+        }
+        Update: {
+          ativo?: boolean | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          nome?: string
+          preco?: number | null
+          recursos?: Json | null
+          tipo?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
           documento: string | null
           email: string | null
           empresa: string | null
+          habilitado: boolean | null
           id: string
           nome_completo: string | null
           plano: string | null
@@ -61,6 +122,7 @@ export type Database = {
           documento?: string | null
           email?: string | null
           empresa?: string | null
+          habilitado?: boolean | null
           id: string
           nome_completo?: string | null
           plano?: string | null
@@ -74,6 +136,7 @@ export type Database = {
           documento?: string | null
           email?: string | null
           empresa?: string | null
+          habilitado?: boolean | null
           id?: string
           nome_completo?: string | null
           plano?: string | null
@@ -83,6 +146,50 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      solicitacoes_orcamento: {
+        Row: {
+          created_at: string | null
+          descricao_necessidade: string
+          email: string
+          empresa: string | null
+          id: string
+          nome: string
+          status: string | null
+          telefone: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          descricao_necessidade: string
+          email: string
+          empresa?: string | null
+          id?: string
+          nome: string
+          status?: string | null
+          telefone?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          descricao_necessidade?: string
+          email?: string
+          empresa?: string | null
+          id?: string
+          nome?: string
+          status?: string | null
+          telefone?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "solicitacoes_orcamento_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

@@ -1,7 +1,9 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from '@/integrations/supabase/client';
+import { PlanoAssinatura } from '@/types/admin';
 
 interface PlanSelectionProps {
   selectedPlan: string;
@@ -9,11 +11,31 @@ interface PlanSelectionProps {
 }
 
 const PlanSelection = ({ selectedPlan, onPlanChange }: PlanSelectionProps) => {
-  const planos = [
-    { value: 'mensal', label: 'Mensal', preco: 'R$ 97,90/mês', desconto: '' },
-    { value: 'trimestral', label: 'Trimestral', preco: 'R$ 79,90/mês', desconto: '18% OFF' },
-    { value: 'anual', label: 'Anual', preco: 'R$ 59,90/mês', desconto: '39% OFF - MAIS POPULAR' }
-  ];
+  const [planos, setPlanos] = useState<PlanoAssinatura[]>([]);
+
+  useEffect(() => {
+    const carregarPlanos = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('planos_assinatura')
+          .select('*')
+          .eq('ativo', true)
+          .order('preco', { ascending: true });
+        
+        if (error) throw error;
+        setPlanos(data || []);
+      } catch (error) {
+        console.error('Erro ao carregar planos:', error);
+      }
+    };
+
+    carregarPlanos();
+  }, []);
+
+  const formatarPreco = (preco: number | null, tipo: string) => {
+    if (tipo === 'orcamento') return 'Solicitar Orçamento';
+    return `R$ ${preco?.toFixed(2).replace('.', ',')}`;
+  };
 
   return (
     <Card className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
@@ -22,23 +44,26 @@ const PlanSelection = ({ selectedPlan, onPlanChange }: PlanSelectionProps) => {
       </CardHeader>
       <CardContent className="space-y-3">
         {planos.map((plano) => (
-          <div key={plano.value} className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-white/50 cursor-pointer">
+          <div key={plano.id} className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-white/50 cursor-pointer">
             <input
               type="radio"
               name="plano"
-              value={plano.value}
-              checked={selectedPlan === plano.value}
+              value={plano.id}
+              checked={selectedPlan === plano.id}
               onChange={(e) => onPlanChange(e.target.value)}
               className="w-4 h-4"
             />
             <div className="flex-1">
               <div className="flex items-center justify-between">
-                <span className="font-medium">{plano.label}</span>
+                <div>
+                  <h4 className="font-medium">{plano.nome}</h4>
+                  <p className="text-sm text-gray-600">{plano.descricao}</p>
+                </div>
                 <div className="text-right">
-                  <span className="font-bold text-lg">{plano.preco}</span>
-                  {plano.desconto && (
+                  <span className="font-bold text-lg">{formatarPreco(plano.preco, plano.tipo)}</span>
+                  {plano.nome === 'Calendário Fiscal de Obrigações' && (
                     <Badge className="ml-2 bg-gradient-to-r from-green-500 to-emerald-500">
-                      {plano.desconto}
+                      Mais Popular
                     </Badge>
                   )}
                 </div>

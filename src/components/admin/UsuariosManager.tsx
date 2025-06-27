@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Users, Plus, Pencil, Trash2, Search, Filter, Check, X, Clock } from "lucide-react";
+import { Users, Plus, Pencil, Trash2, Search, Filter, Check, X, Clock, UserCheck, UserX } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +13,7 @@ import { Usuario } from "@/types/admin";
 import { toast } from "@/hooks/use-toast";
 
 const UsuariosManager = () => {
-  const { usuarios, adicionarUsuario, atualizarUsuario, removerUsuario } = useUsuarios();
+  const { usuarios, adicionarUsuario, atualizarUsuario, removerUsuario, habilitarUsuario, desabilitarUsuario } = useUsuarios();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterPlano, setFilterPlano] = useState("todos");
   const [filterStatus, setFilterStatus] = useState("todos");
@@ -89,6 +88,18 @@ const UsuariosManager = () => {
     }
   };
 
+  const handleHabilitar = (id: string) => {
+    habilitarUsuario(id);
+    toast({ title: "Usuário habilitado com sucesso!" });
+  };
+
+  const handleDesabilitar = (id: string) => {
+    if (confirm("Tem certeza que deseja desabilitar este usuário?")) {
+      desabilitarUsuario(id);
+      toast({ title: "Usuário desabilitado com sucesso!" });
+    }
+  };
+
   const resetForm = () => {
     setEditingUser(null);
     setFormData({ nome: "", email: "", plano: "gratuito", status: "ativo" });
@@ -107,6 +118,14 @@ const UsuariosManager = () => {
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
+  };
+
+  const getHabilitadoBadge = (habilitado?: boolean) => {
+    return habilitado !== false ? (
+      <Badge className="bg-green-100 text-green-800">Habilitado</Badge>
+    ) : (
+      <Badge className="bg-red-100 text-red-800">Desabilitado</Badge>
+    );
   };
 
   return (
@@ -318,6 +337,7 @@ const UsuariosManager = () => {
                 <TableHead>Email</TableHead>
                 <TableHead>Plano</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Habilitado</TableHead>
                 <TableHead>Data Registro</TableHead>
                 <TableHead>Último Acesso</TableHead>
                 <TableHead>Ações</TableHead>
@@ -334,6 +354,7 @@ const UsuariosManager = () => {
                     </Badge>
                   </TableCell>
                   <TableCell>{getStatusBadge(usuario.status)}</TableCell>
+                  <TableCell>{getHabilitadoBadge(usuario.habilitado)}</TableCell>
                   <TableCell>
                     {new Date(usuario.dataRegistro).toLocaleDateString('pt-BR')}
                   </TableCell>
@@ -349,6 +370,27 @@ const UsuariosManager = () => {
                       >
                         <Pencil className="w-3 h-3" />
                       </Button>
+                      
+                      {usuario.habilitado !== false ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDesabilitar(usuario.id)}
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <UserX className="w-3 h-3" />
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleHabilitar(usuario.id)}
+                          className="text-green-600 hover:text-green-700"
+                        >
+                          <UserCheck className="w-3 h-3" />
+                        </Button>
+                      )}
+                      
                       <Button
                         variant="outline"
                         size="sm"

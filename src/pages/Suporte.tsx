@@ -1,188 +1,140 @@
-import { HelpCircle, MessageCircle, Phone, Mail } from "lucide-react";
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Header from "@/components/Header";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import EmailSupportForm from "@/components/forms/EmailSupportForm";
+import { Mail, MessageCircle, MessageSquare, Phone } from "lucide-react";
 
 const Suporte = () => {
-  const [showEmailForm, setShowEmailForm] = useState(false);
-
-  const canaisSuposte = [
-    {
-      titulo: "Chat Online",
-      descricao: "Atendimento em tempo real",
-      icone: MessageCircle,
-      disponibilidade: "Seg-Sex: 8h às 18h",
-      cor: "from-blue-500 to-blue-600",
-      action: () => window.open("https://wa.me/5515997625135", "_blank")
-    },
-    {
-      titulo: "Telefone",
-      descricao: "Suporte via telefone",
-      icone: Phone,
-      disponibilidade: "(15) 3013-7302",
-      cor: "from-emerald-500 to-emerald-600",
-      action: () => window.open("tel:1530137302", "_self")
-    },
-    {
-      titulo: "E-mail",
-      descricao: "Envie sua dúvida por e-mail",
-      icone: Mail,
-      disponibilidade: "suporte@conectafisco.com.br",
-      cor: "from-purple-500 to-purple-600",
-      action: () => setShowEmailForm(true)
-    }
-  ];
-
-  const faqItems = [
-    {
-      pergunta: "Como posso cancelar minha assinatura?",
-      resposta: "Você pode cancelar sua assinatura a qualquer momento através do painel do usuário ou entrando em contato conosco."
-    },
-    {
-      pergunta: "Os cursos possuem certificado?",
-      resposta: "Sim, todos os nossos cursos emitem certificado de conclusão válido em todo território nacional."
-    },
-    {
-      pergunta: "Posso parcelar o pagamento dos cursos?",
-      resposta: "Sim, oferecemos parcelamento em até 12x no cartão de crédito para a maioria dos nossos produtos."
-    },
-    {
-      pergunta: "Como funciona o suporte técnico?",
-      resposta: "Oferecemos suporte técnico através de chat, e-mail e telefone durante horário comercial."
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <Header />
-      
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50">
+      <header className="bg-white shadow-md">
+        <div className="container mx-auto px-4 py-6">
+          <h1 className="text-2xl font-semibold text-slate-800">Central de Suporte</h1>
+        </div>
+      </header>
+
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent mb-4">
-              Central de Suporte
-            </h1>
-            <p className="text-xl text-slate-600">
-              Estamos aqui para ajudar você
-            </p>
-          </div>
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold text-slate-800 mb-4">Como podemos ajudar?</h2>
+          <p className="text-slate-600">
+            Encontre respostas para as perguntas mais frequentes ou entre em contato conosco diretamente.
+          </p>
+        </section>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {canaisSuposte.map((canal, index) => {
-              const IconComponent = canal.icone;
-              return (
-                <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer">
-                  <CardHeader className="text-center">
-                    <div className={`mx-auto w-16 h-16 rounded-full bg-gradient-to-r ${canal.cor} flex items-center justify-center mb-4`}>
-                      <IconComponent className="w-8 h-8 text-white" />
-                    </div>
-                    <CardTitle className="text-slate-800">{canal.titulo}</CardTitle>
-                    <p className="text-slate-600">{canal.descricao}</p>
-                  </CardHeader>
-                  <CardContent className="text-center">
-                    <p className="text-sm text-slate-600 mb-4">{canal.disponibilidade}</p>
-                    <Button 
-                      className={`w-full bg-gradient-to-r ${canal.cor} hover:opacity-90`}
-                      onClick={canal.action}
-                    >
-                      Iniciar Contato
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card className="bg-white shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center text-slate-800">
-                  <HelpCircle className="w-6 h-6 mr-3 text-blue-600" />
-                  Perguntas Frequentes
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {faqItems.map((item, index) => (
-                    <div key={index} className="border-b border-slate-200 pb-4 last:border-b-0">
-                      <h3 className="font-semibold text-slate-800 mb-2">{item.pergunta}</h3>
-                      <p className="text-slate-600 text-sm">{item.resposta}</p>
-                    </div>
-                  ))}
-                </div>
-                <Button className="w-full mt-6" variant="outline">
-                  Ver Todas as Perguntas
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-r from-blue-50 to-emerald-50 border-blue-200">
-              <CardHeader>
-                <CardTitle className="text-slate-800">Recursos de Autoajuda</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 bg-white rounded-lg">
-                    <h3 className="font-semibold text-slate-800 mb-2">Base de Conhecimento</h3>
-                    <p className="text-sm text-slate-600 mb-3">
-                      Acesse nossa biblioteca de artigos e tutoriais
-                    </p>
-                    <Button size="sm" variant="outline">Acessar</Button>
-                  </div>
-
-                  <div className="p-4 bg-white rounded-lg">
-                    <h3 className="font-semibold text-slate-800 mb-2">Vídeos Tutoriais</h3>
-                    <p className="text-sm text-slate-600 mb-3">
-                      Aprenda através de vídeos explicativos
-                    </p>
-                    <Button size="sm" variant="outline">Assistir</Button>
-                  </div>
-
-                  <div className="p-4 bg-white rounded-lg">
-                    <h3 className="font-semibold text-slate-800 mb-2">Comunidade</h3>
-                    <p className="text-sm text-slate-600 mb-3">
-                      Participe do fórum de discussões
-                    </p>
-                    <Button size="sm" variant="outline">Participar</Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card className="mt-12 bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
+          {/* Canais de Atendimento */}
+          <Card>
             <CardHeader>
-              <CardTitle className="text-center text-slate-800">
-                Não encontrou o que procurava?
+              <CardTitle className="flex items-center space-x-2">
+                <MessageSquare className="w-5 h-5" />
+                <span>Canais de Atendimento</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-center">
-              <p className="text-slate-600 mb-6">
-                Nossa equipe está pronta para ajudar você com qualquer dúvida ou problema.
-              </p>
-              <div className="space-x-4">
-                <Button 
-                  className="bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700"
-                  asChild
-                >
-                  <Link to="/contato">Entrar em Contato</Link>
-                </Button>
-                <Button variant="outline">
-                  Agendar Ligação
-                </Button>
+            <CardContent className="space-y-4">
+              <div className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg">
+                <Phone className="w-5 h-5 text-blue-600" />
+                <div>
+                  <h4 className="font-medium">Telefone</h4>
+                  <p className="text-slate-600">(15) 3013-7302</p>
+                  <p className="text-sm text-slate-500">Seg a Sex, 8h às 18h</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg">
+                <MessageCircle className="w-5 h-5 text-green-600" />
+                <div>
+                  <h4 className="font-medium">WhatsApp</h4>
+                  <p className="text-slate-600">(15) 99876-5432</p>
+                  <p className="text-sm text-slate-500">Seg a Sex, 8h às 18h</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg">
+                <Mail className="w-5 h-5 text-purple-600" />
+                <div>
+                  <h4 className="font-medium">Email</h4>
+                  <p className="text-slate-600">suporte@conectafisco.com.br</p>
+                  <p className="text-sm text-slate-500">Resposta em até 24h</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Perguntas Frequentes */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <MessageSquare className="w-5 h-5" />
+                <span>Perguntas Frequentes</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <h4 className="font-medium">Como emitir uma nota fiscal?</h4>
+                <p className="text-slate-600">
+                  Para emitir uma nota fiscal, acesse o painel do emissor, preencha os dados e confirme a emissão.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="font-medium">Qual o prazo para pagamento de impostos?</h4>
+                <p className="text-slate-600">
+                  O prazo para pagamento de impostos varia conforme o tipo de imposto e o regime tributário da empresa.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="font-medium">Como funciona a emissão de boletos?</h4>
+                <p className="text-slate-600">
+                  A emissão de boletos é feita através do nosso sistema, onde você pode personalizar os dados e gerar o boleto.
+                </p>
               </div>
             </CardContent>
           </Card>
         </div>
-      </div>
 
-      <EmailSupportForm 
-        isOpen={showEmailForm} 
-        onClose={() => setShowEmailForm(false)} 
-      />
+        {/* FAQ Expandido */}
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold text-slate-800 mb-4">FAQ - Perguntas Frequentes</h2>
+          <div className="space-y-4">
+            <details className="border border-slate-200 rounded-lg p-4">
+              <summary className="font-medium text-slate-800 cursor-pointer">
+                Quais os tipos de suporte oferecidos?
+              </summary>
+              <p className="text-slate-600 mt-2">
+                Oferecemos suporte técnico, fiscal e contábil através de telefone, email e chat.
+              </p>
+            </details>
+
+            <details className="border border-slate-200 rounded-lg p-4">
+              <summary className="font-medium text-slate-800 cursor-pointer">
+                Como funciona o suporte técnico?
+              </summary>
+              <p className="text-slate-600 mt-2">
+                O suporte técnico está disponível para auxiliar na configuração e uso das ferramentas.
+              </p>
+            </details>
+
+            <details className="border border-slate-200 rounded-lg p-4">
+              <summary className="font-medium text-slate-800 cursor-pointer">
+                Qual o tempo de resposta do suporte?
+              </summary>
+              <p className="text-slate-600 mt-2">
+                Nosso tempo de resposta é de até 24 horas para email e imediato para telefone e chat.
+              </p>
+            </details>
+          </div>
+        </section>
+
+        {/* Contato Adicional */}
+        <section>
+          <h2 className="text-xl font-semibold text-slate-800 mb-4">Precisa de ajuda extra?</h2>
+          <p className="text-slate-600">
+            Entre em contato conosco para suporte personalizado.
+          </p>
+          <div className="mt-4">
+            <Button variant="outline">Fale Conosco</Button>
+          </div>
+        </section>
+      </div>
     </div>
   );
 };

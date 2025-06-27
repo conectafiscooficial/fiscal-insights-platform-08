@@ -1,305 +1,218 @@
-
 import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Crown, CreditCard, Eye, EyeOff } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useUsuarios } from "@/contexts/UsuariosContext";
 import PlanSelection from './PlanSelection';
-import PersonalDataForm from './PersonalDataForm';
-import AddressForm from './AddressForm';
-import ProfessionalDataForm from './ProfessionalDataForm';
+import SolicitacaoOrcamentoForm from './SolicitacaoOrcamentoForm';
 
 interface AssinaturaPremiumFormProps {
   isOpen: boolean;
   onClose: () => void;
-  menuTitle?: string;
 }
 
-const AssinaturaPremiumForm = ({ isOpen, onClose, menuTitle }: AssinaturaPremiumFormProps) => {
+const AssinaturaPremiumForm = ({ isOpen, onClose }: AssinaturaPremiumFormProps) => {
+  const { signUp } = useAuth();
+  const { adicionarUsuario } = useUsuarios();
+  const [loading, setLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState('');
   const [formData, setFormData] = useState({
-    // Dados Pessoais
     nome: '',
-    cpf: '',
-    rg: '',
-    dataNascimento: '',
-    telefone: '',
     email: '',
-    
-    // Login
-    senha: '',
-    confirmarSenha: '',
-    
-    // Endereço
-    cep: '',
-    endereco: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    cidade: '',
-    estado: '',
-    
-    // Dados Profissionais
+    telefone: '',
+    tipoPessoa: 'fisica',
+    documento: '',
     empresa: '',
-    cargo: '',
-    crc: '',
-    
-    // Plano
-    plano: 'anual',
-    aceiteTermos: false
+    password: ''
   });
+  const [showOrcamentoForm, setShowOrcamentoForm] = useState(false);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
-  const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handlePlanChange = (planId: string) => {
+    setSelectedPlan(planId);
+    
+    // Se selecionou consultoria, mostrar formulário de orçamento
+    const isConsultoria = planId === 'consultoria-especializada';
+    if (isConsultoria) {
+      setShowOrcamentoForm(true);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.aceiteTermos) {
-      toast({
-        title: "Erro",
-        description: "É necessário aceitar os termos de uso.",
-        variant: "destructive"
-      });
+    // Se for consultoria, não processar aqui
+    if (selectedPlan === 'consultoria-especializada') {
       return;
     }
 
-    // Validação básica dos campos obrigatórios
-    const camposObrigatorios = ['nome', 'cpf', 'email', 'telefone', 'cep', 'endereco', 'cidade', 'estado', 'senha', 'confirmarSenha'];
-    const camposFaltando = camposObrigatorios.filter(campo => !formData[campo as keyof typeof formData]);
-    
-    if (camposFaltando.length > 0) {
-      toast({
-        title: "Erro",
-        description: "Por favor, preencha todos os campos obrigatórios.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Validar senhas
-    if (formData.senha !== formData.confirmarSenha) {
-      toast({
-        title: "Erro",
-        description: "As senhas não coincidem.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (formData.senha.length < 6) {
-      toast({
-        title: "Erro",
-        description: "A senha deve ter pelo menos 6 caracteres.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
+    setLoading(true);
 
     try {
-      // Criar conta no Supabase
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      const { error: signUpError } = await signUp(formData.email, formData.password, {
+        nome_completo: formData.nome,
+        telefone: formData.telefone,
+        tipo_pessoa: formData.tipoPessoa,
+        documento: formData.documento,
+        empresa: formData.empresa
+      });
+
+      if (signUpError) throw signUpError;
+
+      // Adicionar usuário ao contexto com status pendente
+      await adicionarUsuario({
+        nome: formData.nome,
         email: formData.email,
-        password: formData.senha,
-        options: {
-          data: {
-            nome_completo: formData.nome,
-            telefone: formData.telefone,
-            cpf: formData.cpf,
-            plano_solicitado: formData.plano
-          }
-        }
+        plano: selectedPlan === 'calendario-fiscal' ? 'basico' : 'gratuito',
+        status: 'pendente',
+        dataRegistro: new Date().toISOString(),
+        ultimoAcesso: new Date().toISOString(),
+        documento: formData.documento,
+        empresa: formData.empresa,
+        telefone: formData.telefone
       });
-
-      if (authError) {
-        throw authError;
-      }
-
-      // Criar registro de assinatura pendente
-      if (authData.user) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .update({
-            nome_completo: formData.nome,
-            telefone: formData.telefone,
-            documento: formData.cpf,
-            empresa: formData.empresa,
-            plano: formData.plano,
-            status: 'pendente' // Status pendente para aprovação do admin
-          })
-          .eq('id', authData.user.id);
-
-        if (profileError) {
-          console.error('Erro ao atualizar perfil:', profileError);
-        }
-      }
 
       toast({
-        title: "Assinatura Premium Solicitada!",
-        description: "Sua conta foi criada e está aguardando aprovação do administrador. Você receberá um e-mail quando for aprovada.",
+        title: "Solicitação enviada com sucesso!",
+        description: "Sua solicitação está sendo analisada. Você receberá um email de confirmação em breve."
       });
 
-      setTimeout(() => {
-        onClose();
-      }, 2000);
-
+      onClose();
     } catch (error: any) {
-      console.error('Erro na assinatura:', error);
+      console.error('Erro no cadastro:', error);
       toast({
-        title: "Erro",
-        description: error.message || "Erro ao processar assinatura. Tente novamente.",
+        title: "Erro no cadastro",
+        description: error.message || "Erro interno do servidor",
         variant: "destructive"
       });
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center space-x-2">
-            <Crown className="w-5 h-5 text-yellow-500" />
-            <span>Assinatura Premium</span>
-            {menuTitle && <span className="text-sm text-gray-500">- {menuTitle}</span>}
-          </DialogTitle>
-        </DialogHeader>
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <PlanSelection 
-            selectedPlan={formData.plano}
-            onPlanChange={(plan) => handleInputChange('plano', plan)}
-          />
-
-          <PersonalDataForm 
-            formData={{
-              nome: formData.nome,
-              cpf: formData.cpf,
-              rg: formData.rg,
-              dataNascimento: formData.dataNascimento,
-              telefone: formData.telefone,
-              email: formData.email
-            }}
-            onFieldChange={handleInputChange}
-          />
-
-          {/* Dados de Login */}
-          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <h3 className="font-semibold text-blue-800 mb-4">Dados de Login</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="senha">Senha *</Label>
-                <div className="relative">
-                  <Input
-                    id="senha"
-                    type={showPassword ? "text" : "password"}
-                    value={formData.senha}
-                    onChange={(e) => handleInputChange('senha', e.target.value)}
-                    placeholder="Mínimo 6 caracteres"
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="confirmarSenha">Confirmar Senha *</Label>
-                <div className="relative">
-                  <Input
-                    id="confirmarSenha"
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={formData.confirmarSenha}
-                    onChange={(e) => handleInputChange('confirmarSenha', e.target.value)}
-                    placeholder="Digite novamente a senha"
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <AddressForm 
-            formData={{
-              cep: formData.cep,
-              endereco: formData.endereco,
-              numero: formData.numero,
-              complemento: formData.complemento,
-              bairro: formData.bairro,
-              cidade: formData.cidade,
-              estado: formData.estado
-            }}
-            onFieldChange={handleInputChange}
-          />
-
-          <ProfessionalDataForm 
-            formData={{
-              empresa: formData.empresa,
-              cargo: formData.cargo,
-              crc: formData.crc
-            }}
-            onFieldChange={handleInputChange}
-          />
-
-          {/* Termos */}
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="aceiteTermos"
-              checked={formData.aceiteTermos}
-              onCheckedChange={(checked) => handleInputChange('aceiteTermos', checked)}
+    <>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Assinatura Premium</DialogTitle>
+          </DialogHeader>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <PlanSelection 
+              selectedPlan={selectedPlan} 
+              onPlanChange={handlePlanChange}
             />
-            <Label htmlFor="aceiteTermos" className="text-sm">
-              Aceito os <span className="text-blue-600 underline cursor-pointer">termos de uso</span> e 
-              <span className="text-blue-600 underline cursor-pointer"> política de privacidade</span> *
-            </Label>
-          </div>
 
-          {/* Botões */}
-          <div className="flex space-x-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="flex-1"
-              disabled={isSubmitting}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-              disabled={isSubmitting}
-            >
-              <CreditCard className="w-4 h-4 mr-2" />
-              {isSubmitting ? 'Processando...' : 'Solicitar Assinatura'}
-            </Button>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+            <div>
+              <Label htmlFor="nome">Nome Completo</Label>
+              <Input
+                id="nome"
+                value={formData.nome}
+                onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                required
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="password">Senha</Label>
+              <Input
+                id="password"
+                type="password"
+                value={formData.password}
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                required
+              />
+            </div>
+            
+            <div>
+              <Label>Tipo de Pessoa</Label>
+              <RadioGroup
+                defaultValue={formData.tipoPessoa}
+                onValueChange={(value: 'fisica' | 'juridica') => setFormData({...formData, tipoPessoa: value})}
+                className="flex space-x-2"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="fisica" id="r1" />
+                  <Label htmlFor="r1">Física</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="juridica" id="r2" />
+                  <Label htmlFor="r2">Jurídica</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            
+            <div>
+              <Label htmlFor="documento">
+                {formData.tipoPessoa === 'fisica' ? 'CPF' : 'CNPJ'}
+              </Label>
+              <Input
+                id="documento"
+                value={formData.documento}
+                onChange={(e) => setFormData({...formData, documento: e.target.value})}
+                required
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="telefone">Telefone</Label>
+              <Input
+                id="telefone"
+                value={formData.telefone}
+                onChange={(e) => setFormData({...formData, telefone: e.target.value})}
+                placeholder="(11) 99999-9999"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="empresa">Empresa</Label>
+              <Input
+                id="empresa"
+                value={formData.empresa}
+                onChange={(e) => setFormData({...formData, empresa: e.target.value})}
+              />
+            </div>
+
+            <div className="flex space-x-4">
+              <Button 
+                type="submit" 
+                className="flex-1" 
+                disabled={loading || selectedPlan === 'consultoria-especializada'}
+              >
+                {loading ? 'Processando...' : 'Solicitar Assinatura'}
+              </Button>
+              <Button type="button" variant="outline" onClick={onClose}>
+                Cancelar
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <SolicitacaoOrcamentoForm
+        isOpen={showOrcamentoForm}
+        onClose={() => {
+          setShowOrcamentoForm(false);
+          onClose();
+        }}
+      />
+    </>
   );
 };
 

@@ -13,6 +13,8 @@ interface UsuariosContextType {
   alterarPlano: (id: string, novoPlano: Usuario['plano']) => void;
   carregarUsuarios: () => Promise<void>;
   pendingCount: number;
+  habilitarUsuario: (id: string) => void;
+  desabilitarUsuario: (id: string) => void;
 }
 
 const UsuariosContext = createContext<UsuariosContextType | undefined>(undefined);
@@ -47,7 +49,8 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
         ultimoAcesso: profile.updated_at || new Date().toISOString(),
         documento: profile.documento || undefined,
         empresa: profile.empresa || undefined,
-        telefone: profile.telefone || undefined
+        telefone: profile.telefone || undefined,
+        habilitado: profile.habilitado ?? true
       }));
       
       setUsuarios(usuariosFormatados);
@@ -86,9 +89,27 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
             }
           }
         });
+
+        // Se foi aprovado e escolheu o plano Calendário Fiscal, enviar planilha
+        if (tipo === 'aprovacao' && dadosUsuario.plano === 'basico') {
+          await enviarPlanilhaFiscal(dadosUsuario.email, dadosUsuario.nome);
+        }
       }
     } catch (error) {
       console.error('Erro ao enviar notificação:', error);
+    }
+  };
+
+  const enviarPlanilhaFiscal = async (email: string, nome: string) => {
+    try {
+      await supabase.functions.invoke('send-notification-email', {
+        body: {
+          tipo: 'planilha-fiscal',
+          dadosUsuario: { email, nome }
+        }
+      });
+    } catch (error) {
+      console.error('Erro ao enviar planilha fiscal:', error);
     }
   };
 
@@ -114,6 +135,7 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
           nome_completo: dados.nome,
           status: dados.status,
           plano: dados.plano,
+          habilitado: dados.habilitado,
           updated_at: new Date().toISOString()
         })
         .eq('id', id);
@@ -165,6 +187,14 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
     atualizarUsuario(id, { plano: novoPlano });
   };
 
+  const habilitarUsuario = (id: string) => {
+    atualizarUsuario(id, { habilitado: true });
+  };
+
+  const desabilitarUsuario = (id: string) => {
+    atualizarUsuario(id, { habilitado: false });
+  };
+
   useEffect(() => {
     carregarUsuarios();
   }, []);
@@ -179,7 +209,9 @@ export const UsuariosProvider = ({ children }: { children: ReactNode }) => {
     desbloquearUsuario,
     alterarPlano,
     carregarUsuarios,
-    pendingCount
+    pendingCount,
+    habilitarUsuario,
+    desabilitarUsuario
   };
 
   return (

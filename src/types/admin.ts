@@ -9,6 +9,7 @@ export interface Usuario {
   documento?: string;
   empresa?: string;
   telefone?: string;
+  habilitado?: boolean;
 }
 
 export interface Artigo {
@@ -108,4 +109,36 @@ export interface SecaoTematica {
   descricao: string;
   conteudos: string[];
   ativa: boolean;
+}
+
+export interface PlanoAssinatura {
+  id: string;
+  nome: string;
+  descricao: string | null;
+  preco: number | null;
+  tipo: 'fixo' | 'orcamento';
+  ativo: boolean;
+  recursos: Record<string, any>;
+  created_at: string;
+}
+
+export interface PlanilhaMensal {
+  id: string;
+  mes: number;
+  ano: number;
+  arquivo_url: string;
+  descricao: string | null;
+  created_at: string;
+}
+
+export interface SolicitacaoOrcamento {
+  id: string;
+  user_id: string | null;
+  nome: string;
+  email: string;
+  telefone: string | null;
+  empresa: string | null;
+  descricao_necessidade: string;
+  status: 'pendente' | 'analisando' | 'respondido' | 'fechado';
+  created_at: string;
 }
