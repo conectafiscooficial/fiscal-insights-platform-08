@@ -273,6 +273,86 @@ const PaginasManager = () => {
       },
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
+    },
+    {
+      id: '13',
+      nome: 'IR Pessoa Física',
+      titulo: 'Imposto de Renda Pessoa Física',
+      url: '/ir/pessoa-fisica',
+      categoria: 'IR',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Imposto de Renda Pessoa Física',
+        heroSubtitle: 'Declare seu IR com Segurança!',
+        heroDescription: 'Declare seu IR com segurança e maximize sua restituição!',
+        beneficios: [
+          'Declaração completa de IR Pessoa Física',
+          'Maximização de deduções legais',
+          'Verificação de restituição'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '14',
+      nome: 'IR Pessoa Jurídica',
+      titulo: 'Imposto de Renda Pessoa Jurídica',
+      url: '/ir/pessoa-juridica',
+      categoria: 'IR',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Imposto de Renda Pessoa Jurídica',
+        heroSubtitle: 'Mantenha Sua Empresa em Conformidade!',
+        heroDescription: 'Mantenha sua empresa em conformidade fiscal com nossa consultoria especializada em IR-PJ.',
+        beneficios: [
+          'Declaração de IR Pessoa Jurídica',
+          'Apuração correta do lucro tributável',
+          'Otimização da carga tributária'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '15',
+      nome: 'PIS/COFINS Cumulativo',
+      titulo: 'PIS/COFINS Cumulativo',
+      url: '/pis-cofins/cumulativo',
+      categoria: 'PIS/COFINS',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'PIS/COFINS Cumulativo',
+        heroSubtitle: 'Entenda e Aplique Corretamente!',
+        heroDescription: 'Entenda e aplique corretamente o regime cumulativo do PIS/COFINS.',
+        beneficios: [
+          'Apuração PIS/COFINS cumulativo',
+          'Cálculo correto das alíquotas',
+          'Verificação de regime aplicável'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '16',
+      nome: 'eSocial',
+      titulo: 'eSocial - Escrituração Digital',
+      url: '/trabalho-previdencia/esocial',
+      categoria: 'Trabalho e Previdência',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'eSocial - Escrituração Digital',
+        heroSubtitle: 'Implemente com Nossa Expertise!',
+        heroDescription: 'Implemente e gerencie o eSocial da sua empresa com nossa expertise.',
+        beneficios: [
+          'Implementação completa do eSocial',
+          'Gestão de eventos trabalhistas',
+          'Integração com folha de pagamento'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     }
   ]);
 
@@ -377,7 +457,19 @@ const PaginasManager = () => {
   };
 
   // Atualizar o Select de categorias para incluir todas as novas categorias
-  const categorias = ["todas", "Simples Nacional", "IR", "PIS/COFINS", "ICMS/ISS/IPI", "Trabalho e Previdência", "Comercial", "SPED", "Declarações"];
+  const categorias = [
+    "todas", 
+    "Simples Nacional", 
+    "IR", 
+    "PIS/COFINS", 
+    "ICMS/ISS/IPI", 
+    "Trabalho e Previdência", 
+    "Comercial", 
+    "SPED", 
+    "Declarações",
+    "Contabilidade",
+    "Reforma da Previdência"
+  ];
 
   return (
     <div className="space-y-6">

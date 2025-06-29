@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -35,6 +34,11 @@ import TrabalhoPrevidencia from "./pages/TrabalhoPrevidencia";
 import Comercial from "./pages/Comercial";
 import Sped from "./pages/Sped";
 import Declaracoes from "./pages/Declaracoes";
+// Subcategory imports
+import PessoaFisica from "./pages/ir/PessoaFisica";
+import PessoaJuridica from "./pages/ir/PessoaJuridica";
+import Cumulativo from "./pages/pis-cofins/Cumulativo";
+import ESocial from "./pages/trabalho-previdencia/ESocial";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +59,7 @@ const App = () => (
                     <AdminPanel />
                   </ProtectedRoute>
                 } />
+                
                 <Route path="/quem-somos" element={<QuemSomos />} />
                 <Route path="/softwares" element={<Softwares />} />
                 <Route path="/consultoria" element={<Consultoria />} />
@@ -66,11 +71,15 @@ const App = () => (
                 <Route path="/contato" element={<Contato />} />
                 <Route path="/newsletter" element={<Newsletter />} />
                 <Route path="/suporte" element={<Suporte />} />
+                
+                {/* Simples Nacional Routes */}
                 <Route path="/desenquadramento" element={<Desenquadramento />} />
                 <Route path="/optantes" element={<Optantes />} />
                 <Route path="/sublimites" element={<Sublimites />} />
                 <Route path="/anexos" element={<Anexos />} />
                 <Route path="/calculo" element={<Calculo />} />
+                
+                {/* Main Category Routes */}
                 <Route path="/ir" element={<IR />} />
                 <Route path="/pis-cofins" element={<PisCofins />} />
                 <Route path="/icms-iss-ipi" element={<IcmsIssIpi />} />
@@ -78,6 +87,17 @@ const App = () => (
                 <Route path="/comercial" element={<Comercial />} />
                 <Route path="/sped" element={<Sped />} />
                 <Route path="/declaracoes" element={<Declaracoes />} />
+                
+                {/* IR Subcategory Routes */}
+                <Route path="/ir/pessoa-fisica" element={<PessoaFisica />} />
+                <Route path="/ir/pessoa-juridica" element={<PessoaJuridica />} />
+                
+                {/* PIS/COFINS Subcategory Routes */}
+                <Route path="/pis-cofins/cumulativo" element={<Cumulativo />} />
+                
+                {/* Trabalho e Previdência Subcategory Routes */}
+                <Route path="/trabalho-previdencia/esocial" element={<ESocial />} />
+                
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
