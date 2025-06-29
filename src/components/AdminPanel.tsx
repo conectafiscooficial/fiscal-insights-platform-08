@@ -1,5 +1,5 @@
 
-import { Users, FileText, Settings, BarChart3, Calendar, Book, ShoppingCart, MessageSquare, ArrowLeft, TrendingUp, ClipboardList, Monitor } from "lucide-react";
+import { Users, FileText, Settings, BarChart3, Calendar, Book, ShoppingCart, MessageSquare, ArrowLeft, TrendingUp, ClipboardList, Monitor, Globe } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ import VendasManager from "./admin/VendasManager";
 import ConfiguracoesManager from "./admin/ConfiguracoesManager";
 import SolicitacoesManager from "./admin/SolicitacoesManager";
 import ContratacoesSoftwareManager from "./admin/ContratacoesSoftwareManager";
+import PaginasManager from "./admin/PaginasManager";
 import NotificationBadge from "./admin/NotificationBadge";
 
 const AdminPanelContent = () => {
@@ -78,7 +79,7 @@ const AdminPanelContent = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="usuarios" className="w-full">
-          <TabsList className="grid w-full grid-cols-9 mb-6">
+          <TabsList className="grid w-full grid-cols-10 mb-6">
             <TabsTrigger value="usuarios" className="flex items-center space-x-2">
               <Users className="w-4 h-4" />
               <span>Usuários</span>
@@ -86,6 +87,10 @@ const AdminPanelContent = () => {
             <TabsTrigger value="conteudo" className="flex items-center space-x-2">
               <FileText className="w-4 h-4" />
               <span>Conteúdo</span>
+            </TabsTrigger>
+            <TabsTrigger value="paginas" className="flex items-center space-x-2">
+              <Globe className="w-4 h-4" />
+              <span>Páginas</span>
             </TabsTrigger>
             <TabsTrigger value="indices" className="flex items-center space-x-2">
               <TrendingUp className="w-4 h-4" />
@@ -125,6 +130,11 @@ const AdminPanelContent = () => {
           {/* Gestão de Conteúdo */}
           <TabsContent value="conteudo">
             <ConteudoManager />
+          </TabsContent>
+
+          {/* Gestão de Páginas */}
+          <TabsContent value="paginas">
+            <PaginasManager />
           </TabsContent>
 
           {/* Gestão de Índices Econômicos */}

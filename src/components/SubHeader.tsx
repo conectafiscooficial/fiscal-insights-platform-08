@@ -17,9 +17,14 @@ const SubHeader = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const handleMenuClick = (requiresAuth: boolean, requiresPremium: boolean) => {
+  const handleMenuClick = (requiresAuth: boolean, requiresPremium: boolean, path?: string) => {
     if (requiresAuth && !user) {
       navigate('/auth');
+      return;
+    }
+    
+    if (path) {
+      navigate(path);
       return;
     }
     
@@ -31,7 +36,13 @@ const SubHeader = () => {
   const menuItems = [
     {
       title: "SIMPLES",
-      items: ["Optantes", "Desenquadramento", "Sublimites", "Anexos", "Cálculo"]
+      items: [
+        { name: "Optantes", path: "/optantes" },
+        { name: "Desenquadramento", path: "/desenquadramento" },
+        { name: "Sublimites", path: "/sublimites" },
+        { name: "Anexos", path: "/anexos" },
+        { name: "Cálculo", path: "/calculo" }
+      ]
     },
     {
       title: "IR",
@@ -71,7 +82,7 @@ const SubHeader = () => {
     }
   ];
 
-  const menusComPremium = ["SIMPLES", "IR", "PIS/COFINS", "ICMS/ISS/IPI", "Trabalho e Previdência", "SPED", "Contabilidade", "Reforma da Previdência"];
+  const menusComPremium = ["IR", "PIS/COFINS", "ICMS/ISS/IPI", "Trabalho e Previdência", "SPED", "Contabilidade", "Reforma da Previdência"];
 
   return (
     <>
@@ -90,20 +101,27 @@ const SubHeader = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56 bg-white shadow-lg border border-slate-200">
-                  {menu.items.map((item, itemIndex) => (
-                    <DropdownMenuItem
-                      key={itemIndex}
-                      className="hover:bg-blue-50 hover:text-blue-700 cursor-pointer"
-                      onClick={() => {
-                        handleMenuClick(true, menusComPremium.includes(menu.title));
-                      }}
-                    >
-                      {item}
-                      {menusComPremium.includes(menu.title) && (
-                        <span className="ml-auto text-xs text-blue-600">👑</span>
-                      )}
-                    </DropdownMenuItem>
-                  ))}
+                  {menu.items.map((item, itemIndex) => {
+                    const itemData = typeof item === 'object' ? item : { name: item };
+                    return (
+                      <DropdownMenuItem
+                        key={itemIndex}
+                        className="hover:bg-blue-50 hover:text-blue-700 cursor-pointer"
+                        onClick={() => {
+                          handleMenuClick(
+                            true, 
+                            menusComPremium.includes(menu.title) && !itemData.path,
+                            itemData.path
+                          );
+                        }}
+                      >
+                        {itemData.name}
+                        {menusComPremium.includes(menu.title) && !itemData.path && (
+                          <span className="ml-auto text-xs text-blue-600">👑</span>
+                        )}
+                      </DropdownMenuItem>
+                    );
+                  })}
                 </DropdownMenuContent>
               </DropdownMenu>
             ))}

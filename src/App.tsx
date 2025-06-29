@@ -23,6 +23,11 @@ import InCompany from "./pages/InCompany";
 import Contato from "./pages/Contato";
 import Newsletter from "./pages/Newsletter";
 import Suporte from "./pages/Suporte";
+import Desenquadramento from "./pages/Desenquadramento";
+import Optantes from "./pages/Optantes";
+import Sublimites from "./pages/Sublimites";
+import Anexos from "./pages/Anexos";
+import Calculo from "./pages/Calculo";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +59,11 @@ const App = () => (
                 <Route path="/contato" element={<Contato />} />
                 <Route path="/newsletter" element={<Newsletter />} />
                 <Route path="/suporte" element={<Suporte />} />
+                <Route path="/desenquadramento" element={<Desenquadramento />} />
+                <Route path="/optantes" element={<Optantes />} />
+                <Route path="/sublimites" element={<Sublimites />} />
+                <Route path="/anexos" element={<Anexos />} />
+                <Route path="/calculo" element={<Calculo />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
