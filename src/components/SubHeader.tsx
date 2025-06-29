@@ -46,30 +46,37 @@ const SubHeader = () => {
     },
     {
       title: "IR",
+      path: "/ir",
       items: ["Pessoa Física", "Pessoa Jurídica", "Lucro Real", "Lucro Presumido", "Declarações"]
     },
     {
       title: "PIS/COFINS",
+      path: "/pis-cofins",
       items: ["Cumulativo", "Não Cumulativo", "Substituição Tributária", "Créditos", "Retenções"]
     },
     {
       title: "ICMS/ISS/IPI",
+      path: "/icms-iss-ipi",
       items: ["ICMS Estadual", "ISS Municipal", "IPI Federal", "Substituição Tributária", "Benefícios"]
     },
     {
       title: "Trabalho e Previdência",
+      path: "/trabalho-previdencia",
       items: ["eSocial", "FGTS", "Contribuições", "Folha de Pagamento", "Benefícios"]
     },
     {
       title: "Comercial",
+      path: "/comercial",
       items: ["Notas Fiscais", "Contratos", "Documentos", "Importação/Exportação"]
     },
     {
       title: "SPED",
+      path: "/sped",
       items: ["ECD", "ECF", "EFD-Contribuições", "EFD-ICMS/IPI", "Reinf"]
     },
     {
       title: "Declarações",
+      path: "/declaracoes",
       items: ["DARF", "GFIP", "DIRF", "DME", "Outras Declarações"]
     },
     {
@@ -82,7 +89,7 @@ const SubHeader = () => {
     }
   ];
 
-  const menusComPremium = ["IR", "PIS/COFINS", "ICMS/ISS/IPI", "Trabalho e Previdência", "SPED", "Contabilidade", "Reforma da Previdência"];
+  const menusComPremium = ["Contabilidade", "Reforma da Previdência"];
 
   return (
     <>
@@ -95,6 +102,11 @@ const SubHeader = () => {
                   <Button
                     variant="ghost"
                     className="text-white hover:bg-slate-600 hover:text-white whitespace-nowrap text-sm font-medium flex items-center space-x-1 px-3 py-2"
+                    onClick={() => {
+                      if (menu.path) {
+                        navigate(menu.path);
+                      }
+                    }}
                   >
                     <span>{menu.title}</span>
                     <ChevronDown className="w-3 h-3" />

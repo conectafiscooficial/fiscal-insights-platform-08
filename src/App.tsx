@@ -28,6 +28,13 @@ import Optantes from "./pages/Optantes";
 import Sublimites from "./pages/Sublimites";
 import Anexos from "./pages/Anexos";
 import Calculo from "./pages/Calculo";
+import IR from "./pages/IR";
+import PisCofins from "./pages/PisCofins";
+import IcmsIssIpi from "./pages/IcmsIssIpi";
+import TrabalhoPrevidencia from "./pages/TrabalhoPrevidencia";
+import Comercial from "./pages/Comercial";
+import Sped from "./pages/Sped";
+import Declaracoes from "./pages/Declaracoes";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +71,13 @@ const App = () => (
                 <Route path="/sublimites" element={<Sublimites />} />
                 <Route path="/anexos" element={<Anexos />} />
                 <Route path="/calculo" element={<Calculo />} />
+                <Route path="/ir" element={<IR />} />
+                <Route path="/pis-cofins" element={<PisCofins />} />
+                <Route path="/icms-iss-ipi" element={<IcmsIssIpi />} />
+                <Route path="/trabalho-previdencia" element={<TrabalhoPrevidencia />} />
+                <Route path="/comercial" element={<Comercial />} />
+                <Route path="/sped" element={<Sped />} />
+                <Route path="/declaracoes" element={<Declaracoes />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

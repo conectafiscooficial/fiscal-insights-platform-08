@@ -73,6 +73,206 @@ const PaginasManager = () => {
       },
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
+    },
+    {
+      id: '3',
+      nome: 'Sublimites',
+      titulo: 'Sublimites Simples Nacional',
+      url: '/sublimites',
+      categoria: 'Simples Nacional',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Sublimites do Simples Nacional',
+        heroSubtitle: 'Entenda os Sublimites e Evite Problemas com o Fisco!',
+        heroDescription: 'Orientação sobre sublimites do Simples Nacional...',
+        beneficios: [
+          'Análise personalizada do faturamento',
+          'Verificação de obrigações estaduais e municipais',
+          'Planejamento tributário estratégico'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '4',
+      nome: 'Anexos',
+      titulo: 'Anexos Simples Nacional',
+      url: '/anexos',
+      categoria: 'Simples Nacional',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Anexos do Simples Nacional',
+        heroSubtitle: 'Descubra em Qual Anexo Sua Empresa se Enquadra!',
+        heroDescription: 'Identificação do anexo correto para sua empresa...',
+        beneficios: [
+          'Identificação correta do anexo',
+          'Cálculo exato dos tributos',
+          'Orientação sobre Fator "r"'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '5',
+      nome: 'Calculo',
+      titulo: 'Cálculo Simples Nacional',
+      url: '/calculo',
+      categoria: 'Simples Nacional',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Cálculo do Simples Nacional',
+        heroSubtitle: 'Aprenda Como Calcular Corretamente!',
+        heroDescription: 'Orientação sobre cálculo do Simples Nacional...',
+        beneficios: [
+          'Cálculo correto conforme tabela oficial',
+          'Simulação de tributos',
+          'Análise do Fator "r"'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '6',
+      nome: 'IR',
+      titulo: 'Imposto de Renda',
+      url: '/ir',
+      categoria: 'IR',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Imposto de Renda',
+        heroSubtitle: 'Declare Seu IR com Segurança!',
+        heroDescription: 'Especialistas em Declaração de IR para PF e PJ...',
+        beneficios: [
+          'Cálculo correto do Imposto de Renda devido',
+          'Planejamento tributário para redução legal',
+          'Assessoria completa para PF e PJ'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '7',
+      nome: 'PIS/COFINS',
+      titulo: 'PIS/COFINS',
+      url: '/pis-cofins',
+      categoria: 'PIS/COFINS',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'PIS/COFINS',
+        heroSubtitle: 'Otimize Sua Apuração e Aproveite Todos os Créditos!',
+        heroDescription: 'Especialistas em apuração de PIS e COFINS...',
+        beneficios: [
+          'Cálculo correto do PIS e COFINS devido',
+          'Identificação de créditos tributários',
+          'Orientação sobre regime cumulativo e não-cumulativo'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '8',
+      nome: 'ICMS/ISS/IPI',
+      titulo: 'ICMS/ISS/IPI',
+      url: '/icms-iss-ipi',
+      categoria: 'ICMS/ISS/IPI',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'ICMS/ISS/IPI',
+        heroSubtitle: 'Domine os Impostos com Nossa Consultoria!',
+        heroDescription: 'Especialistas em tributação estadual, municipal e federal...',
+        beneficios: [
+          'Cálculo correto de ICMS, ISS e IPI',
+          'Aproveitamento de créditos tributários',
+          'Orientação sobre substituição tributária'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '9',
+      nome: 'Trabalho e Previdência',
+      titulo: 'Trabalho e Previdência',
+      url: '/trabalho-previdencia',
+      categoria: 'Trabalho e Previdência',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Trabalho e Previdência',
+        heroSubtitle: 'Mantenha Sua Empresa em Dia com as Obrigações!',
+        heroDescription: 'Especialistas em gestão trabalhista e previdenciária...',
+        beneficios: [
+          'Gestão completa do eSocial',
+          'Cálculo correto de FGTS e contribuições',
+          'Folha de pagamento sem erros'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '10',
+      nome: 'Comercial',
+      titulo: 'Gestão Comercial',
+      url: '/comercial',
+      categoria: 'Comercial',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Gestão Comercial',
+        heroSubtitle: 'Organize Sua Documentação Comercial!',
+        heroDescription: 'Especialistas em gestão comercial e documentação fiscal...',
+        beneficios: [
+          'Gestão completa de documentos fiscais',
+          'Orientação sobre contratos comerciais',
+          'Regularização de notas fiscais'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '11',
+      nome: 'SPED',
+      titulo: 'SPED',
+      url: '/sped',
+      categoria: 'SPED',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'SPED - Sistema Público de Escrituração Digital',
+        heroSubtitle: 'Mantenha Todas as Obrigações SPED em Dia!',
+        heroDescription: 'Especialistas em todas as modalidades do SPED...',
+        beneficios: [
+          'Escrituração fiscal digital completa',
+          'Gestão de todas as obrigações SPED',
+          'Validação de arquivos antes do envio'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '12',
+      nome: 'Declarações',
+      titulo: 'Gestão de Declarações',
+      url: '/declaracoes',
+      categoria: 'Declarações',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Gestão de Declarações',
+        heroSubtitle: 'Mantenha Todas as Declarações em Dia!',
+        heroDescription: 'Especialistas em gestão de declarações fiscais...',
+        beneficios: [
+          'Gestão completa de todas as declarações',
+          'Cálculo correto de tributos devidos',
+          'Entrega sempre dentro dos prazos'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     }
   ]);
 
@@ -176,6 +376,9 @@ const PaginasManager = () => {
     });
   };
 
+  // Atualizar o Select de categorias para incluir todas as novas categorias
+  const categorias = ["todas", "Simples Nacional", "IR", "PIS/COFINS", "ICMS/ISS/IPI", "Trabalho e Previdência", "Comercial", "SPED", "Declarações"];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -202,10 +405,11 @@ const PaginasManager = () => {
             <SelectValue placeholder="Filtrar por categoria" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="todas">Todas as categorias</SelectItem>
-            <SelectItem value="Simples Nacional">Simples Nacional</SelectItem>
-            <SelectItem value="IR">Imposto de Renda</SelectItem>
-            <SelectItem value="PIS/COFINS">PIS/COFINS</SelectItem>
+            {categorias.map(categoria => (
+              <SelectItem key={categoria} value={categoria}>
+                {categoria === "todas" ? "Todas as categorias" : categoria}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
