@@ -39,6 +39,9 @@ import PessoaFisica from "./pages/ir/PessoaFisica";
 import PessoaJuridica from "./pages/ir/PessoaJuridica";
 import Cumulativo from "./pages/pis-cofins/Cumulativo";
 import ESocial from "./pages/trabalho-previdencia/ESocial";
+import BuscaAvancada from "./pages/BuscaAvancada";
+import FerramentasUteis from "./pages/FerramentasUteis";
+import Publicacoes from "./pages/Publicacoes";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +67,9 @@ const App = () => (
                 <Route path="/softwares" element={<Softwares />} />
                 <Route path="/consultoria" element={<Consultoria />} />
                 <Route path="/ferramentas" element={<Ferramentas />} />
+                <Route path="/ferramentas-uteis" element={<FerramentasUteis />} />
+                <Route path="/busca-avancada" element={<BuscaAvancada />} />
+                <Route path="/publicacoes" element={<Publicacoes />} />
                 <Route path="/cursos" element={<Cursos />} />
                 <Route path="/cursos/ead" element={<EAD />} />
                 <Route path="/cursos/presencial" element={<Presencial />} />

@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { Phone, Mail, User, Menu } from "lucide-react";
 import { useState } from "react";
 import UserMenu from "./UserMenu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, ChevronDown } from "@radix-ui/react-dropdown-menu";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,56 +44,54 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-6">
-            <Link to="/quem-somos" className="text-slate-700 hover:text-blue-600 transition-colors">
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link to="/quem-somos" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
               Quem Somos
             </Link>
             
-            <div className="relative group">
-              <button className="text-slate-700 hover:text-blue-600 transition-colors flex items-center space-x-1">
-                <span>Produtos</span>
-              </button>
-              <div className="absolute left-0 top-full pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <div className="bg-white rounded-lg shadow-lg border border-slate-200 py-2">
-                  <Link to="/softwares" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
-                    Softwares
-                  </Link>
-                  <Link to="/consultoria" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
-                    Consultoria
-                  </Link>
-                  <Link to="/ferramentas" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
-                    Ferramentas
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-slate-700 hover:text-blue-600 flex items-center space-x-1">
+                  <span>Produtos</span>
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-48 bg-white shadow-lg border border-slate-200">
+                <DropdownMenuItem asChild>
+                  <Link to="/softwares" className="w-full">Softwares</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/consultoria" className="w-full">Consultoria</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/ferramentas" className="w-full">Ferramentas</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/ferramentas-uteis" className="w-full">Ferramentas Úteis</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/busca-avancada" className="w-full">Busca Avançada</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-            <div className="relative group">
-              <button className="text-slate-700 hover:text-blue-600 transition-colors flex items-center space-x-1">
-                <span>Cursos</span>
-              </button>
-              <div className="absolute left-0 top-full pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <div className="bg-white rounded-lg shadow-lg border border-slate-200 py-2">
-                  <Link to="/cursos/ead" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
-                    EAD
-                  </Link>
-                  <Link to="/cursos/presencial" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
-                    Presencial
-                  </Link>
-                  <Link to="/cursos/incompany" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-blue-600">
-                    In Company
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <Link to="/contato" className="text-slate-700 hover:text-blue-600 transition-colors">
+            <Link to="/cursos" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
+              Cursos
+            </Link>
+            
+            <Link to="/publicacoes" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
+              Publicações
+            </Link>
+            
+            <Link to="/contato" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
               Contato
             </Link>
-            <Link to="/newsletter" className="text-slate-700 hover:text-blue-600 transition-colors">
+            
+            <Link to="/newsletter" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
               Newsletter
             </Link>
-            <Link to="/suporte" className="text-slate-700 hover:text-blue-600 transition-colors">
+            
+            <Link to="/suporte" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
               Suporte
             </Link>
           </nav>

@@ -353,6 +353,72 @@ const PaginasManager = () => {
       },
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
+    },
+    {
+      id: '17',
+      nome: 'Busca Avançada',
+      titulo: 'Busca Avançada de Atos e Legislação',
+      url: '/busca-avancada',
+      categoria: 'Ferramentas',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Busca Avançada de Atos e Legislação',
+        heroSubtitle: 'Encontre Rapidamente o que Precisa!',
+        heroDescription: 'Encontre rapidamente leis, decretos, portarias e outras normas fiscais com nossa ferramenta de busca avançada.',
+        beneficios: [
+          'Busca por tipo de ato',
+          'Filtros por órgão emissor',
+          'Pesquisa por palavras-chave',
+          'Resultados organizados',
+          'Acesso rápido aos documentos'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '18',
+      nome: 'Ferramentas Úteis',
+      titulo: 'Ferramentas Úteis',
+      url: '/ferramentas-uteis',
+      categoria: 'Ferramentas',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Ferramentas Úteis',
+        heroSubtitle: 'Facilite Seu Trabalho Fiscal!',
+        heroDescription: 'Acesse nossas calculadoras e simuladores para facilitar seu trabalho fiscal e contábil.',
+        beneficios: [
+          'Calculadora de INSS',
+          'Simulador Simples Nacional',
+          'Custo de Funcionário',
+          'Alíquotas por Estado',
+          'Códigos de Receita'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '19',
+      nome: 'Publicações',
+      titulo: 'Publicações e Legislações',
+      url: '/publicacoes',
+      categoria: 'Conteúdo',
+      status: 'ativo',
+      conteudo: {
+        heroTitle: 'Publicações e Legislações',
+        heroSubtitle: 'Mantenha-se Sempre Atualizado!',
+        heroDescription: 'Acesse manuais, guias e legislações atualizadas para se manter sempre informado.',
+        beneficios: [
+          'Manual do eSocial 2024',
+          'Guia SPED Fiscal',
+          'Tabela de Códigos NCM',
+          'Modelos de DARF',
+          'Legislações Recentes'
+        ]
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     }
   ]);
 
@@ -468,7 +534,9 @@ const PaginasManager = () => {
     "SPED", 
     "Declarações",
     "Contabilidade",
-    "Reforma da Previdência"
+    "Reforma da Previdência",
+    "Ferramentas",
+    "Conteúdo"
   ];
 
   return (
