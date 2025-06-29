@@ -12,9 +12,10 @@ import { useAuth } from '@/contexts/AuthContext';
 interface SolicitacaoOrcamentoFormProps {
   isOpen: boolean;
   onClose: () => void;
+  servico?: string;
 }
 
-const SolicitacaoOrcamentoForm = ({ isOpen, onClose }: SolicitacaoOrcamentoFormProps) => {
+const SolicitacaoOrcamentoForm = ({ isOpen, onClose, servico }: SolicitacaoOrcamentoFormProps) => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     nome: '',
@@ -34,6 +35,7 @@ const SolicitacaoOrcamentoForm = ({ isOpen, onClose }: SolicitacaoOrcamentoFormP
         .from('solicitacoes_orcamento')
         .insert({
           user_id: user?.id || null,
+          servico: servico || 'Consultoria Geral',
           ...formData
         });
 
@@ -68,7 +70,9 @@ const SolicitacaoOrcamentoForm = ({ isOpen, onClose }: SolicitacaoOrcamentoFormP
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Solicitar Orçamento - Consultoria Especializada</DialogTitle>
+          <DialogTitle>
+            {servico ? `Solicitar Orçamento - ${servico}` : 'Solicitar Orçamento - Consultoria Especializada'}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
