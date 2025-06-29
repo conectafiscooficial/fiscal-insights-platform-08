@@ -166,27 +166,24 @@ const SubHeader = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56 bg-white shadow-lg border border-slate-200">
-                  {menu.items.map((item, itemIndex) => {
-                    const itemData = typeof item === 'object' ? item : { name: item };
-                    return (
-                      <DropdownMenuItem
-                        key={itemIndex}
-                        className="hover:bg-blue-50 hover:text-blue-700 cursor-pointer"
-                        onClick={() => {
-                          handleMenuClick(
-                            true, 
-                            menusComPremium.includes(menu.title) && !itemData.path,
-                            itemData.path
-                          );
-                        }}
-                      >
-                        {itemData.name}
-                        {menusComPremium.includes(menu.title) && !itemData.path && (
-                          <span className="ml-auto text-xs text-blue-600">👑</span>
-                        )}
-                      </DropdownMenuItem>
-                    );
-                  })}
+                  {menu.items.map((item, itemIndex) => (
+                    <DropdownMenuItem
+                      key={itemIndex}
+                      className="hover:bg-blue-50 hover:text-blue-700 cursor-pointer"
+                      onClick={() => {
+                        handleMenuClick(
+                          true, 
+                          menusComPremium.includes(menu.title) && !item.path,
+                          item.path
+                        );
+                      }}
+                    >
+                      {item.name}
+                      {menusComPremium.includes(menu.title) && !item.path && (
+                        <span className="ml-auto text-xs text-blue-600">👑</span>
+                      )}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             ))}
