@@ -45,6 +45,12 @@ import ESocial from "./pages/trabalho-previdencia/ESocial";
 import BuscaAvancada from "./pages/BuscaAvancada";
 import FerramentasUteis from "./pages/FerramentasUteis";
 import Publicacoes from "./pages/Publicacoes";
+// New subcategory imports
+import IcmsEstadual from "./pages/icms-iss-ipi/IcmsEstadual";
+import IssMunicipal from "./pages/icms-iss-ipi/IssMunicipal";
+import IpiFederal from "./pages/icms-iss-ipi/IpiFederal";
+import Fgts from "./pages/trabalho-previdencia/Fgts";
+import Ecd from "./pages/sped/Ecd";
 
 const queryClient = new QueryClient();
 
@@ -106,8 +112,17 @@ const App = () => (
                 {/* PIS/COFINS Subcategory Routes */}
                 <Route path="/pis-cofins/cumulativo" element={<Cumulativo />} />
                 
+                {/* ICMS/ISS/IPI Subcategory Routes */}
+                <Route path="/icms-iss-ipi/icms-estadual" element={<IcmsEstadual />} />
+                <Route path="/icms-iss-ipi/iss-municipal" element={<IssMunicipal />} />
+                <Route path="/icms-iss-ipi/ipi-federal" element={<IpiFederal />} />
+                
                 {/* Trabalho e Previdência Subcategory Routes */}
                 <Route path="/trabalho-previdencia/esocial" element={<ESocial />} />
+                <Route path="/trabalho-previdencia/fgts" element={<Fgts />} />
+                
+                {/* SPED Subcategory Routes */}
+                <Route path="/sped/ecd" element={<Ecd />} />
                 
                 <Route path="*" element={<NotFound />} />
               </Routes>
