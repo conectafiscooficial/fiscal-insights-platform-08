@@ -12,21 +12,23 @@ import {
   Users, 
   FileText, 
   Settings, 
-  BarChart3, 
   Plus, 
   Edit, 
-  Trash2, 
-  Eye,
+  Trash2,
   Save,
   X
 } from "lucide-react";
+
+type TipoUsuario = 'admin' | 'premium' | 'gratuito';
+type StatusUsuario = 'ativo' | 'inativo';
+type StatusArtigo = 'publicado' | 'rascunho';
 
 interface Usuario {
   id: string;
   nome: string;
   email: string;
-  tipo: 'admin' | 'premium' | 'gratuito';
-  status: 'ativo' | 'inativo';
+  tipo: TipoUsuario;
+  status: StatusUsuario;
   dataCadastro: string;
 }
 
@@ -36,7 +38,7 @@ interface Artigo {
   resumo: string;
   categoria: string;
   autor: string;
-  status: 'publicado' | 'rascunho';
+  status: StatusArtigo;
   dataPublicacao: string;
 }
 
@@ -78,18 +80,28 @@ const AdminDashboard = () => {
   const [articleModalOpen, setArticleModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  const [userForm, setUserForm] = useState({
+  const [userForm, setUserForm] = useState<{
+    nome: string;
+    email: string;
+    tipo: TipoUsuario;
+    status: StatusUsuario;
+  }>({
     nome: '',
     email: '',
-    tipo: 'gratuito' as const,
-    status: 'ativo' as const
+    tipo: 'gratuito',
+    status: 'ativo'
   });
 
-  const [articleForm, setArticleForm] = useState({
+  const [articleForm, setArticleForm] = useState<{
+    titulo: string;
+    resumo: string;
+    categoria: string;
+    status: StatusArtigo;
+  }>({
     titulo: '',
     resumo: '',
     categoria: '',
-    status: 'rascunho' as const
+    status: 'rascunho'
   });
 
   const handleEditUser = (user: Usuario) => {
@@ -210,7 +222,7 @@ const AdminDashboard = () => {
           <Card key={index}>
             <CardContent className="p-6">
               <div className="text-center">
-                <p className="text-sm text-gray-600">{stat.label}</p>
+                <p className="text-sm text-muted-foreground">{stat.label}</p>
                 <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
               </div>
             </CardContent>
@@ -246,7 +258,7 @@ const AdminDashboard = () => {
                   <div key={usuario.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
                       <h3 className="font-semibold">{usuario.nome}</h3>
-                      <p className="text-sm text-gray-600">{usuario.email}</p>
+                      <p className="text-sm text-muted-foreground">{usuario.email}</p>
                       <div className="flex space-x-2 mt-2">
                         <Badge className={
                           usuario.tipo === 'premium' ? 'bg-emerald-100 text-emerald-800' :
@@ -297,7 +309,7 @@ const AdminDashboard = () => {
                   <div key={artigo.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
                       <h3 className="font-semibold">{artigo.titulo}</h3>
-                      <p className="text-sm text-gray-600">{artigo.resumo}</p>
+                      <p className="text-sm text-muted-foreground">{artigo.resumo}</p>
                       <div className="flex space-x-2 mt-2">
                         <Badge>{artigo.categoria}</Badge>
                         <Badge className={
@@ -340,7 +352,7 @@ const AdminDashboard = () => {
               <div className="space-y-4">
                 <div>
                   <h3 className="font-semibold mb-2">Configurações Gerais</h3>
-                  <p className="text-gray-600">Configurações básicas do sistema em desenvolvimento...</p>
+                  <p className="text-muted-foreground">Configurações básicas do sistema em desenvolvimento...</p>
                 </div>
               </div>
             </CardContent>
@@ -377,7 +389,7 @@ const AdminDashboard = () => {
               <select
                 className="w-full p-2 border rounded-md"
                 value={userForm.tipo}
-                onChange={(e) => setUserForm({...userForm, tipo: e.target.value as any})}
+                onChange={(e) => setUserForm({...userForm, tipo: e.target.value as TipoUsuario})}
               >
                 <option value="gratuito">Gratuito</option>
                 <option value="premium">Premium</option>
@@ -389,7 +401,7 @@ const AdminDashboard = () => {
               <select
                 className="w-full p-2 border rounded-md"
                 value={userForm.status}
-                onChange={(e) => setUserForm({...userForm, status: e.target.value as any})}
+                onChange={(e) => setUserForm({...userForm, status: e.target.value as StatusUsuario})}
               >
                 <option value="ativo">Ativo</option>
                 <option value="inativo">Inativo</option>
@@ -446,7 +458,7 @@ const AdminDashboard = () => {
               <select
                 className="w-full p-2 border rounded-md"
                 value={articleForm.status}
-                onChange={(e) => setArticleForm({...articleForm, status: e.target.value as any})}
+                onChange={(e) => setArticleForm({...articleForm, status: e.target.value as StatusArtigo})}
               >
                 <option value="rascunho">Rascunho</option>
                 <option value="publicado">Publicado</option>

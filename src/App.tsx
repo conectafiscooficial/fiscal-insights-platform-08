@@ -49,7 +49,16 @@ import Publicacoes from "./pages/Publicacoes";
 import IcmsEstadual from "./pages/icms-iss-ipi/IcmsEstadual";
 import IssMunicipal from "./pages/icms-iss-ipi/IssMunicipal";
 import IpiFederal from "./pages/icms-iss-ipi/IpiFederal";
+import SubstituicaoTributaria from "./pages/icms-iss-ipi/SubstituicaoTributaria";
+import BeneficiosICMS from "./pages/icms-iss-ipi/Beneficios";
 import Fgts from "./pages/trabalho-previdencia/Fgts";
+import Contribuicoes from "./pages/trabalho-previdencia/Contribuicoes";
+import FolhaPagamento from "./pages/trabalho-previdencia/FolhaPagamento";
+import BeneficiosTP from "./pages/trabalho-previdencia/Beneficios";
+import NotasFiscais from "./pages/comercial/NotasFiscais";
+import Contratos from "./pages/comercial/Contratos";
+import Documentos from "./pages/comercial/Documentos";
+import ImportacaoExportacao from "./pages/comercial/ImportacaoExportacao";
 import Ecd from "./pages/sped/Ecd";
 
 const queryClient = new QueryClient();
@@ -116,10 +125,21 @@ const App = () => (
                 <Route path="/icms-iss-ipi/icms-estadual" element={<IcmsEstadual />} />
                 <Route path="/icms-iss-ipi/iss-municipal" element={<IssMunicipal />} />
                 <Route path="/icms-iss-ipi/ipi-federal" element={<IpiFederal />} />
+                <Route path="/icms-iss-ipi/substituicao-tributaria" element={<SubstituicaoTributaria />} />
+                <Route path="/icms-iss-ipi/beneficios" element={<BeneficiosICMS />} />
                 
                 {/* Trabalho e Previdência Subcategory Routes */}
                 <Route path="/trabalho-previdencia/esocial" element={<ESocial />} />
                 <Route path="/trabalho-previdencia/fgts" element={<Fgts />} />
+                <Route path="/trabalho-previdencia/contribuicoes" element={<Contribuicoes />} />
+                <Route path="/trabalho-previdencia/folha-pagamento" element={<FolhaPagamento />} />
+                <Route path="/trabalho-previdencia/beneficios" element={<BeneficiosTP />} />
+                
+                {/* Comercial Subcategory Routes */}
+                <Route path="/comercial/notas-fiscais" element={<NotasFiscais />} />
+                <Route path="/comercial/contratos" element={<Contratos />} />
+                <Route path="/comercial/documentos" element={<Documentos />} />
+                <Route path="/comercial/importacao-exportacao" element={<ImportacaoExportacao />} />
                 
                 {/* SPED Subcategory Routes */}
                 <Route path="/sped/ecd" element={<Ecd />} />
