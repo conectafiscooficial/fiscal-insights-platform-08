@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Briefcase, Shield, BookOpen, Receipt, Calendar, Clock, Eye, AlertCircle,
-  Calculator, FileText, Users, Crown, TrendingUp, Bell, ArrowRight, Lightbulb
+  Calculator, FileText, Users, Crown, TrendingUp, ArrowRight, Lightbulb, LockKeyhole
 } from "lucide-react";
 import { getConteudosDestaque, getPrazosProximos } from "@/data/mockConteudos";
 
