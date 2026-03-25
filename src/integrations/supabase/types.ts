@@ -14,7 +14,291 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      conteudos: {
+        Row: {
+          autor_id: string | null
+          categoria: string
+          comentario_tecnico: string | null
+          created_at: string | null
+          data_publicacao: string
+          destaque: boolean | null
+          dicas_alertas: string | null
+          exemplo_pratico: string | null
+          fonte_url: string | null
+          id: string
+          modelo_documento: string | null
+          nivel_acesso: string
+          numero_norma: string | null
+          orgao_emissor: string | null
+          resumo_executivo: string | null
+          status: string
+          tags: string[] | null
+          texto_oficial: string | null
+          tipo: string
+          titulo: string
+          updated_at: string | null
+          visualizacoes: number | null
+        }
+        Insert: {
+          autor_id?: string | null
+          categoria: string
+          comentario_tecnico?: string | null
+          created_at?: string | null
+          data_publicacao?: string
+          destaque?: boolean | null
+          dicas_alertas?: string | null
+          exemplo_pratico?: string | null
+          fonte_url?: string | null
+          id?: string
+          modelo_documento?: string | null
+          nivel_acesso?: string
+          numero_norma?: string | null
+          orgao_emissor?: string | null
+          resumo_executivo?: string | null
+          status?: string
+          tags?: string[] | null
+          texto_oficial?: string | null
+          tipo?: string
+          titulo: string
+          updated_at?: string | null
+          visualizacoes?: number | null
+        }
+        Update: {
+          autor_id?: string | null
+          categoria?: string
+          comentario_tecnico?: string | null
+          created_at?: string | null
+          data_publicacao?: string
+          destaque?: boolean | null
+          dicas_alertas?: string | null
+          exemplo_pratico?: string | null
+          fonte_url?: string | null
+          id?: string
+          modelo_documento?: string | null
+          nivel_acesso?: string
+          numero_norma?: string | null
+          orgao_emissor?: string | null
+          resumo_executivo?: string | null
+          status?: string
+          tags?: string[] | null
+          texto_oficial?: string | null
+          tipo?: string
+          titulo?: string
+          updated_at?: string | null
+          visualizacoes?: number | null
+        }
+        Relationships: []
+      }
+      matriculas: {
+        Row: {
+          created_at: string | null
+          dados_matricula: Json | null
+          id: string
+          nome_curso: string
+          status: string | null
+          tipo_curso: string
+          user_id: string | null
+          valor: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          dados_matricula?: Json | null
+          id?: string
+          nome_curso: string
+          status?: string | null
+          tipo_curso: string
+          user_id?: string | null
+          valor?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          dados_matricula?: Json | null
+          id?: string
+          nome_curso?: string
+          status?: string | null
+          tipo_curso?: string
+          user_id?: string | null
+          valor?: number | null
+        }
+        Relationships: []
+      }
+      planilhas_mensais: {
+        Row: {
+          ano: number
+          arquivo_url: string
+          created_at: string | null
+          descricao: string | null
+          id: string
+          mes: number
+        }
+        Insert: {
+          ano: number
+          arquivo_url: string
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          mes: number
+        }
+        Update: {
+          ano?: number
+          arquivo_url?: string
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          mes?: number
+        }
+        Relationships: []
+      }
+      planos_assinatura: {
+        Row: {
+          ativo: boolean | null
+          created_at: string | null
+          descricao: string | null
+          id: string
+          nome: string
+          preco: number | null
+          recursos: Json | null
+          tipo: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          nome: string
+          preco?: number | null
+          recursos?: Json | null
+          tipo: string
+        }
+        Update: {
+          ativo?: boolean | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          nome?: string
+          preco?: number | null
+          recursos?: Json | null
+          tipo?: string
+        }
+        Relationships: []
+      }
+      prazos_obrigacoes: {
+        Row: {
+          categoria: string
+          created_at: string | null
+          data_vencimento: string
+          descricao: string | null
+          id: string
+          nivel_acesso: string
+          orgao_responsavel: string | null
+          recorrencia: string | null
+          titulo: string
+        }
+        Insert: {
+          categoria: string
+          created_at?: string | null
+          data_vencimento: string
+          descricao?: string | null
+          id?: string
+          nivel_acesso?: string
+          orgao_responsavel?: string | null
+          recorrencia?: string | null
+          titulo: string
+        }
+        Update: {
+          categoria?: string
+          created_at?: string | null
+          data_vencimento?: string
+          descricao?: string | null
+          id?: string
+          nivel_acesso?: string
+          orgao_responsavel?: string | null
+          recorrencia?: string | null
+          titulo?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          documento: string | null
+          email: string | null
+          empresa: string | null
+          habilitado: boolean | null
+          id: string
+          nome_completo: string | null
+          plano: string | null
+          status: string | null
+          telefone: string | null
+          tipo_pessoa: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          documento?: string | null
+          email?: string | null
+          empresa?: string | null
+          habilitado?: boolean | null
+          id: string
+          nome_completo?: string | null
+          plano?: string | null
+          status?: string | null
+          telefone?: string | null
+          tipo_pessoa?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          documento?: string | null
+          email?: string | null
+          empresa?: string | null
+          habilitado?: boolean | null
+          id?: string
+          nome_completo?: string | null
+          plano?: string | null
+          status?: string | null
+          telefone?: string | null
+          tipo_pessoa?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      solicitacoes_orcamento: {
+        Row: {
+          created_at: string | null
+          descricao_necessidade: string
+          email: string
+          empresa: string | null
+          id: string
+          nome: string
+          status: string | null
+          telefone: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          descricao_necessidade: string
+          email: string
+          empresa?: string | null
+          id?: string
+          nome: string
+          status?: string | null
+          telefone?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          descricao_necessidade?: string
+          email?: string
+          empresa?: string | null
+          id?: string
+          nome?: string
+          status?: string | null
+          telefone?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
