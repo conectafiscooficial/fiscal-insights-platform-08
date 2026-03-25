@@ -25,10 +25,10 @@ Deno.serve(async (req) => {
     const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-    console.log('Generating updated legislation content via AI...');
+    console.log('Generating content via AI...');
 
-    // Generate fresh content with AI
-    const aiResponse = await fetch(GATEWAY_URL, {
+    // Generate conteudos
+    const conteudosResponse = await fetch(GATEWAY_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${LOVABLE_API_KEY}`,
@@ -39,90 +39,79 @@ Deno.serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `Você é um especialista em legislação brasileira (trabalhista, previdenciária, contábil e fiscal). 
-Gere conteúdos REAIS e ATUALIZADOS sobre legislação brasileira vigente em março de 2026.
-Responda APENAS com um JSON válido, sem markdown, sem code blocks.
-O JSON deve ter a estrutura: { "conteudos": [...], "prazos": [...] }`
+            content: 'Você gera JSON válido sobre legislação brasileira. Responda APENAS com JSON puro, sem markdown.'
           },
           {
             role: 'user',
-            content: `Gere 12 conteúdos de legislação brasileira atualizados (3 por categoria: Trabalhista, Previdenciaria, Contabil, Fiscal) e 10 prazos de obrigações fiscais/trabalhistas para abril e maio de 2026.
-
-Para cada conteúdo use esta estrutura JSON:
-{
-  "titulo": "string - título da norma ou artigo",
-  "tipo": "legislacao ou artigo",
-  "categoria": "Trabalhista ou Previdenciaria ou Contabil ou Fiscal",
-  "orgao_emissor": "string",
-  "numero_norma": "string ou null",
-  "data_publicacao": "2026-03-XX",
-  "resumo_executivo": "string - 2 frases",
-  "comentario_tecnico": "string - análise técnica detalhada",
-  "exemplo_pratico": "string - exemplo de aplicação ou null",
-  "tags": ["tag1", "tag2"],
-  "nivel_acesso": "gratuito ou premium",
-  "destaque": true/false (4 destaques no total),
-  "status": "publicado"
-}
-
-Para cada prazo:
-{
-  "titulo": "string",
-  "descricao": "string",
-  "data_vencimento": "2026-04-XX ou 2026-05-XX",
-  "recorrencia": "Mensal ou Anual",
-  "categoria": "Trabalhista ou Previdenciaria ou Contabil ou Fiscal",
-  "orgao_responsavel": "string",
-  "nivel_acesso": "gratuito"
-}
-
-Use normas e prazos reais do Brasil (eSocial, DCTF, EFD, DAS, GFIP, ECD, DIRPF, GPS, FGTS, etc.). Datas de vencimento devem ser realistas.`
+            content: `Gere um array JSON com 8 conteúdos de legislação brasileira (2 por categoria: Trabalhista, Previdenciaria, Contabil, Fiscal). Cada item:
+{"titulo":"string","tipo":"legislacao ou artigo","categoria":"Trabalhista/Previdenciaria/Contabil/Fiscal","orgao_emissor":"string","numero_norma":"string ou null","data_publicacao":"2026-03-XX","resumo_executivo":"2 frases curtas","comentario_tecnico":"1 frase","exemplo_pratico":"1 frase ou null","tags":["tag1","tag2"],"nivel_acesso":"gratuito","destaque":false,"status":"publicado"}
+Marque 3 como destaque=true. Use normas reais do Brasil 2025/2026 (eSocial, SPED, ICMS, CLT, INSS, reforma tributária). Retorne apenas o array JSON.`
           }
         ],
-        temperature: 0.7,
-        max_tokens: 4000,
+        temperature: 0.5,
+        max_tokens: 3000,
       }),
     });
 
-    if (!aiResponse.ok) {
-      const errText = await aiResponse.text();
-      throw new Error(`AI Gateway error [${aiResponse.status}]: ${errText}`);
+    if (!conteudosResponse.ok) {
+      const errText = await conteudosResponse.text();
+      throw new Error(`AI error [${conteudosResponse.status}]: ${errText}`);
     }
 
-    const aiData = await aiResponse.json();
-    const rawContent = aiData.choices?.[0]?.message?.content;
+    const conteudosData = await conteudosResponse.json();
+    let rawConteudos = conteudosData.choices?.[0]?.message?.content?.trim() || '[]';
+    if (rawConteudos.startsWith('```')) {
+      rawConteudos = rawConteudos.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
+    }
     
-    if (!rawContent) {
-      throw new Error('No content returned from AI');
+    console.log('Parsing conteudos...');
+    const conteudos = JSON.parse(rawConteudos);
+
+    // Generate prazos
+    const prazosResponse = await fetch(GATEWAY_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-3-flash-preview',
+        messages: [
+          {
+            role: 'system',
+            content: 'Você gera JSON válido sobre obrigações fiscais brasileiras. Responda APENAS com JSON puro.'
+          },
+          {
+            role: 'user',
+            content: `Gere um array JSON com 8 prazos de obrigações fiscais/trabalhistas para abril e maio de 2026. Cada item:
+{"titulo":"string","descricao":"1 frase","data_vencimento":"2026-04-XX ou 2026-05-XX","recorrencia":"Mensal ou Anual","categoria":"Trabalhista/Previdenciaria/Contabil/Fiscal","orgao_responsavel":"string","nivel_acesso":"gratuito"}
+Use obrigações reais: DCTF, GFIP, eSocial, EFD, DAS, DIRPF, ECD, GPS, FGTS. Retorne apenas o array JSON.`
+          }
+        ],
+        temperature: 0.5,
+        max_tokens: 2000,
+      }),
+    });
+
+    if (!prazosResponse.ok) {
+      const errText = await prazosResponse.text();
+      throw new Error(`AI prazos error [${prazosResponse.status}]: ${errText}`);
     }
 
-    console.log('Parsing AI response...');
-    
-    // Clean potential markdown code blocks
-    let cleanContent = rawContent.trim();
-    if (cleanContent.startsWith('```')) {
-      cleanContent = cleanContent.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
+    const prazosData = await prazosResponse.json();
+    let rawPrazos = prazosData.choices?.[0]?.message?.content?.trim() || '[]';
+    if (rawPrazos.startsWith('```')) {
+      rawPrazos = rawPrazos.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
     }
-    
-    const parsed = JSON.parse(cleanContent);
-    const { conteudos, prazos } = parsed;
 
-    if (!Array.isArray(conteudos) || !Array.isArray(prazos)) {
-      throw new Error('Invalid AI response structure');
-    }
+    console.log('Parsing prazos...');
+    const prazos = JSON.parse(rawPrazos);
 
     console.log(`Got ${conteudos.length} conteudos and ${prazos.length} prazos`);
 
-    // Upsert conteudos - delete old and insert new
-    const { error: deleteConteudosError } = await supabase
-      .from('conteudos')
-      .delete()
-      .neq('id', '00000000-0000-0000-0000-000000000000'); // delete all
-
-    if (deleteConteudosError) {
-      console.error('Error deleting old conteudos:', deleteConteudosError);
-    }
-
+    // Clear and insert conteudos
+    await supabase.from('conteudos').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    
     const { error: insertConteudosError } = await supabase
       .from('conteudos')
       .insert(conteudos.map((c: Record<string, unknown>) => ({
@@ -138,23 +127,16 @@ Use normas e prazos reais do Brasil (eSocial, DCTF, EFD, DAS, GFIP, ECD, DIRPF, 
         tags: c.tags || [],
         nivel_acesso: c.nivel_acesso || 'gratuito',
         destaque: c.destaque || false,
-        visualizacoes: Math.floor(Math.random() * 3000),
+        visualizacoes: Math.floor(Math.random() * 3000) + 100,
         status: 'publicado',
       })));
 
     if (insertConteudosError) {
-      throw new Error(`Error inserting conteudos: ${insertConteudosError.message}`);
+      throw new Error(`Insert conteudos error: ${insertConteudosError.message}`);
     }
 
-    // Upsert prazos
-    const { error: deletePrazosError } = await supabase
-      .from('prazos_obrigacoes')
-      .delete()
-      .neq('id', '00000000-0000-0000-0000-000000000000');
-
-    if (deletePrazosError) {
-      console.error('Error deleting old prazos:', deletePrazosError);
-    }
+    // Clear and insert prazos
+    await supabase.from('prazos_obrigacoes').delete().neq('id', '00000000-0000-0000-0000-000000000000');
 
     const { error: insertPrazosError } = await supabase
       .from('prazos_obrigacoes')
@@ -169,16 +151,13 @@ Use normas e prazos reais do Brasil (eSocial, DCTF, EFD, DAS, GFIP, ECD, DIRPF, 
       })));
 
     if (insertPrazosError) {
-      throw new Error(`Error inserting prazos: ${insertPrazosError.message}`);
+      throw new Error(`Insert prazos error: ${insertPrazosError.message}`);
     }
 
     console.log('Content updated successfully!');
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: `Updated ${conteudos.length} conteudos and ${prazos.length} prazos`,
-      }),
+      JSON.stringify({ success: true, message: `Updated ${conteudos.length} conteudos and ${prazos.length} prazos` }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
