@@ -117,6 +117,14 @@ const AdminDashboard = () => {
     mes: '', ano: '', arquivo_url: '', descricao: ''
   });
 
+  // User edit modal
+  const [userModalOpen, setUserModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<Profile | null>(null);
+  const [userForm, setUserForm] = useState({
+    nome_completo: '', email: '', telefone: '', empresa: '', documento: '',
+    plano: 'gratuito', status: 'pendente', habilitado: true
+  });
+
   useEffect(() => { loadAllData(); }, []);
 
   const loadAllData = async () => {
