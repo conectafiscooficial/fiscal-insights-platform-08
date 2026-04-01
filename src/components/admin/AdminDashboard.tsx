@@ -965,6 +965,55 @@ const AdminDashboard = () => {
           </div>
         </DialogContent>
       </Dialog>
+      {/* USER EDIT MODAL */}
+      <Dialog open={userModalOpen} onOpenChange={setUserModalOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle>Editar Usuário</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            <div><Label>Nome Completo</Label><Input value={userForm.nome_completo} onChange={e => setUserForm({...userForm, nome_completo: e.target.value})} /></div>
+            <div><Label>Email</Label><Input value={userForm.email} disabled className="bg-muted" /></div>
+            <div className="grid grid-cols-2 gap-4">
+              <div><Label>Telefone</Label><Input value={userForm.telefone} onChange={e => setUserForm({...userForm, telefone: e.target.value})} /></div>
+              <div><Label>Documento (CPF/CNPJ)</Label><Input value={userForm.documento} onChange={e => setUserForm({...userForm, documento: e.target.value})} /></div>
+            </div>
+            <div><Label>Empresa</Label><Input value={userForm.empresa} onChange={e => setUserForm({...userForm, empresa: e.target.value})} /></div>
+            <div className="grid grid-cols-2 gap-4">
+              <div><Label>Plano</Label>
+                <Select value={userForm.plano} onValueChange={v => setUserForm({...userForm, plano: v})}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="gratuito">Gratuito</SelectItem>
+                    <SelectItem value="basico">Básico</SelectItem>
+                    <SelectItem value="premium">Premium</SelectItem>
+                    <SelectItem value="corporativo">Corporativo</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div><Label>Status</Label>
+                <Select value={userForm.status} onValueChange={v => setUserForm({...userForm, status: v})}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ativo">Ativo</SelectItem>
+                    <SelectItem value="pendente">Pendente</SelectItem>
+                    <SelectItem value="bloqueado">Bloqueado</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Label>Habilitado:</Label>
+              <Button variant="outline" size="sm" onClick={() => setUserForm({...userForm, habilitado: !userForm.habilitado})}
+                className={userForm.habilitado ? 'text-green-600 border-green-300' : 'text-red-600 border-red-300'}>
+                {userForm.habilitado ? <><UserCheck className="w-4 h-4 mr-1" /> Sim</> : <><UserX className="w-4 h-4 mr-1" /> Não</>}
+              </Button>
+            </div>
+            <div className="flex space-x-2">
+              <Button onClick={saveUser} className="flex-1"><Save className="w-4 h-4 mr-2" /> Salvar</Button>
+              <Button variant="outline" onClick={() => setUserModalOpen(false)}><X className="w-4 h-4 mr-2" /> Cancelar</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
