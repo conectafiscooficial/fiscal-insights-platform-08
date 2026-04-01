@@ -598,9 +598,8 @@ const AdminDashboard = () => {
                         </TableCell>
                         <TableCell>{p.created_at ? new Date(p.created_at).toLocaleDateString('pt-BR') : '-'}</TableCell>
                         <TableCell>
-                          <div className="text-xs text-muted-foreground">
-                            {p.telefone && <div>📞 {p.telefone}</div>}
-                            {p.empresa && <div>🏢 {p.empresa}</div>}
+                          <div className="flex space-x-1">
+                            <Button variant="outline" size="sm" onClick={() => openUserModal(p)}><Edit className="w-3 h-3" /></Button>
                           </div>
                         </TableCell>
                       </TableRow>
