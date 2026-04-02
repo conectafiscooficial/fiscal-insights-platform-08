@@ -15,8 +15,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import {
   Users, FileText, Calendar, Settings, Plus, Edit, Trash2, Save, X,
   Search, RefreshCw, Eye, BarChart3, CreditCard, ClipboardList,
-  GraduationCap, FileSpreadsheet, UserCheck, UserX, Check
+  GraduationCap, FileSpreadsheet, UserCheck, UserX, Check, Wallet
 } from "lucide-react";
+import PaymentGatewaysManager from "./PaymentGatewaysManager";
 
 interface Conteudo {
   id: string; titulo: string; tipo: string; categoria: string;
