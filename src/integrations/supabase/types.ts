@@ -122,6 +122,51 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_gateways: {
+        Row: {
+          additional_config: Json | null
+          created_at: string
+          display_name: string
+          environment: string
+          gateway_name: string
+          id: string
+          is_active: boolean
+          public_key: string | null
+          secret_key_encrypted: string | null
+          updated_at: string
+          webhook_secret: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          additional_config?: Json | null
+          created_at?: string
+          display_name: string
+          environment?: string
+          gateway_name: string
+          id?: string
+          is_active?: boolean
+          public_key?: string | null
+          secret_key_encrypted?: string | null
+          updated_at?: string
+          webhook_secret?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          additional_config?: Json | null
+          created_at?: string
+          display_name?: string
+          environment?: string
+          gateway_name?: string
+          id?: string
+          is_active?: boolean
+          public_key?: string | null
+          secret_key_encrypted?: string | null
+          updated_at?: string
+          webhook_secret?: string | null
+          webhook_url?: string | null
+        }
+        Relationships: []
+      }
       planilhas_mensais: {
         Row: {
           ano: number
