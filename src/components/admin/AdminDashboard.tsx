@@ -660,6 +660,11 @@ const AdminDashboard = () => {
           </Card>
         </TabsContent>
 
+        {/* PAGAMENTOS TAB */}
+        <TabsContent value="pagamentos">
+          <PaymentGatewaysManager />
+        </TabsContent>
+
         {/* SOLICITAÇÕES TAB */}
         <TabsContent value="solicitacoes">
           <Card>
