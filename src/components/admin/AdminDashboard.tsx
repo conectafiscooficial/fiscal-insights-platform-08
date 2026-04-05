@@ -15,9 +15,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import {
   Users, FileText, Calendar, Settings, Plus, Edit, Trash2, Save, X,
   Search, RefreshCw, Eye, BarChart3, CreditCard, ClipboardList,
-  GraduationCap, FileSpreadsheet, UserCheck, UserX, Check, Wallet
+  GraduationCap, FileSpreadsheet, UserCheck, UserX, Check, Wallet, Layout
 } from "lucide-react";
 import PaymentGatewaysManager from "./PaymentGatewaysManager";
+import PaginasManager from "./PaginasManager";
 
 interface Conteudo {
   id: string; titulo: string; tipo: string; categoria: string;
@@ -429,8 +430,9 @@ const AdminDashboard = () => {
       </div>
 
       <Tabs defaultValue="conteudos" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-9">
+        <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10">
           <TabsTrigger value="conteudos"><FileText className="w-4 h-4 mr-1" /><span className="hidden sm:inline">Conteúdos</span></TabsTrigger>
+          <TabsTrigger value="paginas"><Layout className="w-4 h-4 mr-1" /><span className="hidden sm:inline">Páginas</span></TabsTrigger>
           <TabsTrigger value="prazos"><Calendar className="w-4 h-4 mr-1" /><span className="hidden sm:inline">Prazos</span></TabsTrigger>
           <TabsTrigger value="usuarios"><Users className="w-4 h-4 mr-1" /><span className="hidden sm:inline">Usuários</span></TabsTrigger>
           <TabsTrigger value="planos"><CreditCard className="w-4 h-4 mr-1" /><span className="hidden sm:inline">Planos</span></TabsTrigger>
@@ -495,7 +497,11 @@ const AdminDashboard = () => {
           </Card>
         </TabsContent>
 
-        {/* PRAZOS TAB */}
+        {/* PÁGINAS TAB */}
+        <TabsContent value="paginas">
+          <PaginasManager />
+        </TabsContent>
+
         <TabsContent value="prazos">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
