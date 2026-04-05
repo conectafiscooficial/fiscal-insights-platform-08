@@ -18,6 +18,7 @@ import {
   GraduationCap, FileSpreadsheet, UserCheck, UserX, Check, Wallet
 } from "lucide-react";
 import PaymentGatewaysManager from "./PaymentGatewaysManager";
+import PaginasManager from "./PaginasManager";
 
 interface Conteudo {
   id: string; titulo: string; tipo: string; categoria: string;
